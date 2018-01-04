@@ -1,0 +1,5 @@
+# ignore unity meta files
+*.meta
+
+# ignoring data files created by these scripts
+source/Data/*
