@@ -58,7 +58,7 @@ namespace NodeLevelEditor
             var parentName = this.HasParent ? this.parent.name : "";
             if (updatedJson.parentName != parentName)
             {
-                var newParent = parentName == "" ? RootParent : NodeDataManager.FindNode(parentName);
+                var newParent = updatedJson.parentName == "" ? RootParent : NodeDataManager.FindNode(updatedJson.parentName);
                 this.ChangeParent(newParent);
             }
         }
