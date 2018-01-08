@@ -21,6 +21,8 @@ namespace NodeLevelEditor
 
         private void showNode()
         {
+            if (this.node == null) { return; }
+
             if (this.node.behaviour == null) { this.createNodeBehaviour(); }
 
             this.node.behaviour.UpdateFromJson();
