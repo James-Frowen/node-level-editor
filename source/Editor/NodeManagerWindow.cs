@@ -9,7 +9,6 @@ namespace NodeLevelEditor
         public bool savingNodeData = false;
         public bool sceneChanged = false;
         public bool noSelectPrimitive = false;
-        public NodeDataName nodeDataName;
 
         public void Update()
         {
@@ -26,20 +25,6 @@ namespace NodeLevelEditor
                 this.selectPrimativeParent();
             }
 
-            if (this.nodeDataName == null)
-            {
-                this.nodeDataName = this.getNodeDataName();
-            }
-        }
-        private NodeDataName getNodeDataName()
-        {
-            var go = FindObjectOfType<NodeDataName>();
-            if (go != null) { return go; }
-
-            var newGo = new GameObject("nodeDataName");
-            var comp = newGo.AddComponent<NodeDataName>();
-            comp.dataFileName = NodeDataManager.ROOM_DATA_FILE;
-            return comp;
         }
         private void selectPrimativeParent()
         {
@@ -94,7 +79,7 @@ namespace NodeLevelEditor
         }
         private void notLoadedGUI()
         {
-            this.nodeDataName.dataFileName = EditorGUILayout.TextField("Data File Name",this.nodeDataName.dataFileName);
+            NodeDataName.DataFileName = EditorGUILayout.TextField("Data File Name", NodeDataName.DataFileName);
             if (GUILayout.Button("Load"))
             {
                 this.Load();
@@ -141,7 +126,7 @@ namespace NodeLevelEditor
 
             this.DeleteAutoGenObjects();
 
-            NodeDataManager.Load(this.nodeDataName.dataFileName);
+            NodeDataManager.Load(NodeDataName.DataFileName);
             var nodes = NodeFactory.CreateNodes(NodeDataManager.NodeJsons);
             this.setRootParent(nodes);
         }
