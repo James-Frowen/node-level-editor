@@ -133,20 +133,9 @@ namespace NodeLevelEditor
 
             this.DeleteAutoGenObjects();
 
+            NodeBehaviour.RootParent = new NodeCreator.EmptyCreator(NodeBehaviour.DEFAULT_PARENT_NAME, Vector3.zero).Create();
             NodeDataManager.Load(NodeDataName.DataFileName);
             var nodes = NodeFactory.CreateNodes(NodeDataManager.NodeJsons);
-            this.setRootParent(nodes);
-        }
-        private void setRootParent(NodeBehaviour[] nodes)
-        {
-            var root = new NodeCreator.EmptyCreator(NodeBehaviour.DEFAULT_PARENT_NAME, Vector3.zero).Create();
-            foreach (var node in nodes)
-            {
-                if (node.Parent == null)
-                {
-                    node.SetParent(root);
-                }
-            }
         }
         public void UnLoad()
         {
