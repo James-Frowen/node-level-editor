@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using System.IO;
+using UnityEditor;
 
 namespace NodeLevelEditor
 {
@@ -10,13 +11,15 @@ namespace NodeLevelEditor
     {
         private static class NodeDataLoader
         {
-            public static string SavePath = Application.dataPath + "/LevelCreator/Data/";
-
+            public static string GetFullPath(string fileName)
+            {
+                return Path.Combine(Application.dataPath, fileName);
+            }
             public static NodeJsonHolder LoadAll(string fileName)
             {
-                if (File.Exists(SavePath + fileName))
+                if (File.Exists(GetFullPath(fileName)))
                 {
-                    var steam = new StreamReader(SavePath + fileName);
+                    var steam = new StreamReader(GetFullPath(fileName));
                     var input = steam.ReadToEnd();
                     steam.Close();
 
@@ -31,19 +34,40 @@ namespace NodeLevelEditor
             }
             public static void SaveAll(string fileName, NodeJsonHolder data)
             {
-                backup(SavePath + fileName);
+                backup(GetFullPath(fileName));
 
                 var text = JsonUtility.ToJson(data, true);
 
-                var steam = new StreamWriter(SavePath + fileName);
+                createFolders(GetFullPath(fileName));
+                var steam = new StreamWriter(GetFullPath(fileName));
                 steam.Write(text);
                 steam.Close();
+            }
+            private static void createFolders(string path)
+            {
+                var folders = path.Split(new char[] { '/', '\\' });
+                var current = "";
+                var previous = "";
+                var folderCount = folders.Length - 1; // -1 because last stirng in path is file
+                for (int i = 0; i < folderCount; i++)
+                {
+                    current += folders[i];
+                    var exist = AssetDatabase.IsValidFolder(current);
+
+                    if (!exist)
+                    {
+                        AssetDatabase.CreateFolder(previous, folders[i]);
+                    }
+
+                    previous = current;
+                    current += "/";
+                }
             }
             private static void backup(string fullPath)
             {
                 if (!File.Exists(fullPath)) { return; }
 
-                var timeString = DateTime.Now.ToString("HH-mm-ss");
+                var timeString = DateTime.Now.ToString("MM-dd-HH-mm-ss");
 
                 var reader = new StreamReader(fullPath);
                 var input = reader.ReadToEnd();
@@ -58,7 +82,7 @@ namespace NodeLevelEditor
         public delegate void OnSave();
         public static event OnSave onSave;
 
-        public const string ROOM_DATA_FILE = "nodes.json";
+        public const string DEFAULT_DATA_FILE_NAME = "node-level-editor/data/nodes.json";
         public const bool AUTOLOAD = true;
         public static bool IsLoaded { get { return _instance != null; } }
         private static NodeDataManager _instance;
@@ -88,11 +112,11 @@ namespace NodeLevelEditor
         }
         public static void Load()
         {
-            Load(ROOM_DATA_FILE);
+            Load(DEFAULT_DATA_FILE_NAME);
         }
         public static void Save()
         {
-            NodeDataLoader.SaveAll(ROOM_DATA_FILE, Instance.holder);
+            NodeDataLoader.SaveAll(DEFAULT_DATA_FILE_NAME, Instance.holder);
             Instance.needSave = false;
             if (onSave != null)
             {

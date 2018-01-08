@@ -24,7 +24,7 @@ namespace NodeLevelEditor
 
             var newGo = new GameObject("NodeDataName");
             var comp = newGo.AddComponent<NodeDataName>();
-            comp.dataFileName = NodeDataManager.ROOM_DATA_FILE;
+            comp.dataFileName = NodeDataManager.DEFAULT_DATA_FILE_NAME;
             return comp;
         }
         public static string DataFileName
