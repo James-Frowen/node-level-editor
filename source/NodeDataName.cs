@@ -3,7 +3,10 @@
 namespace NodeLevelEditor
 {
     [ExecuteInEditMode]
-    public class NodeDataName : MonoBehaviour {
+    public class NodeDataName : MonoBehaviour
+    {
+        public const string DEFAULT_DATA_FILE_NAME = "node-level-editor/data/nodes.json";
+
         private static NodeDataName _instance;
         private static NodeDataName Instance
         {
@@ -24,9 +27,10 @@ namespace NodeLevelEditor
 
             var newGo = new GameObject("NodeDataName");
             var comp = newGo.AddComponent<NodeDataName>();
-            comp.dataFileName = NodeDataManager.DEFAULT_DATA_FILE_NAME;
+            comp.dataFileName = DEFAULT_DATA_FILE_NAME;
             return comp;
         }
+
         public static string DataFileName
         {
             get
@@ -39,7 +43,7 @@ namespace NodeLevelEditor
             }
         }
 
-        private void Update()
+        private void OnEnable()
         {
             if (_instance == null)
             {

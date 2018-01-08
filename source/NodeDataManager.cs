@@ -29,6 +29,7 @@ namespace NodeLevelEditor
                 }
                 else
                 {
+                    Debug.Log(string.Format("file '{0}' does not exist, creating new instance", fileName));
                     return new NodeJsonHolder();
                 }
             }
@@ -42,9 +43,15 @@ namespace NodeLevelEditor
                 var steam = new StreamWriter(GetFullPath(fileName));
                 steam.Write(text);
                 steam.Close();
+                AssetDatabase.Refresh();
             }
             private static void createFolders(string path)
             {
+                if (path.StartsWith(Application.dataPath))
+                {
+                    path = "Assets" + path.Substring(Application.dataPath.Length);
+                }
+
                 var folders = path.Split(new char[] { '/', '\\' });
                 var current = "";
                 var previous = "";
@@ -82,7 +89,6 @@ namespace NodeLevelEditor
         public delegate void OnSave();
         public static event OnSave onSave;
 
-        public const string DEFAULT_DATA_FILE_NAME = "node-level-editor/data/nodes.json";
         public const bool AUTOLOAD = true;
         public static bool IsLoaded { get { return _instance != null; } }
         private static NodeDataManager _instance;
@@ -92,14 +98,9 @@ namespace NodeLevelEditor
             {
                 if (_instance == null)
                 {
-                    if (AUTOLOAD) // this may cause issues if loading data other than from ROOM_DATA_FILE
-                    {
-                        Load();
-                    }
-                    else
-                    {
-                        throw new Exception("StructureManager is not loaded, Call Load first");
-                    }
+                    // this may cause issues if loading data other than from ROOM_DATA_FILE
+                    Load(NodeDataName.DataFileName);
+                    // throw new Exception("NodeDataManager is not loaded, Call Load first");
                 }
                 return _instance;
             }
@@ -110,17 +111,13 @@ namespace NodeLevelEditor
         }
         public static void Load(string fileName)
         {
-            _instance = new NodeDataManager();
+            _instance = new NodeDataManager(fileName);
             var json = NodeDataLoader.LoadAll(fileName);
             _instance.loadData(json); // maybe need this line
         }
-        public static void Load()
-        {
-            Load(DEFAULT_DATA_FILE_NAME);
-        }
         public static void Save()
         {
-            NodeDataLoader.SaveAll(DEFAULT_DATA_FILE_NAME, Instance.holder);
+            NodeDataLoader.SaveAll(Instance.filePath, Instance.holder);
             Instance.needSave = false;
             if (onSave != null)
             {
@@ -204,12 +201,17 @@ namespace NodeLevelEditor
         }
         public static bool NeedSave { get { return Instance.needSave; } }
 
+
+
+
         private NodeJsonHolder holder;
         private List<NodeBehaviour> nodes;
         private bool needSave = false;
-        private NodeDataManager()
+        private string filePath;
+        private NodeDataManager(string filePath)
         {
             this.nodes = new List<NodeBehaviour>();
+            this.filePath = filePath;
         }
         private void loadData(NodeJsonHolder holder)
         {
