@@ -202,7 +202,7 @@ namespace NodeLevelEditor
         }
 
 
-        [MenuItem("Window/Level Editor/Node Manager")]
+        [MenuItem("Window/Node Level Editor/Node Manager")]
         public static void ShowWindow()
         {
             var window = (NodeManagerWindow)GetWindow(typeof(NodeManagerWindow));
