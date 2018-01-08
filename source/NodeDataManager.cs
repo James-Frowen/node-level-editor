@@ -80,11 +80,15 @@ namespace NodeLevelEditor
                 return _instance;
             }
         }
-        public static void Load()
+        public static void Load(string fileName)
         {
             _instance = new NodeDataManager();
-            var json = NodeDataLoader.LoadAll(ROOM_DATA_FILE);
+            var json = NodeDataLoader.LoadAll(fileName);
             _instance.loadData(json); // maybe need this line
+        }
+        public static void Load()
+        {
+            Load(ROOM_DATA_FILE);
         }
         public static void Save()
         {
