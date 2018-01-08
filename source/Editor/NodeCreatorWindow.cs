@@ -11,6 +11,8 @@ namespace NodeLevelEditor
         public NodeJson node;
         public NodeBehaviour parent;
 
+        public bool accepted = false;
+
         public void Update()
         {
             if (this.showNodeInScene)
@@ -70,7 +72,7 @@ namespace NodeLevelEditor
                 }
                 if (GUILayout.Button("Discard"))
                 {
-                    this.closeWindow();
+                    this.discardNode();
                 }
                 GUILayout.EndHorizontal();
             }
@@ -110,6 +112,10 @@ namespace NodeLevelEditor
             this.node.position = EditorGUILayout.Vector3Field("position", this.node.position);
             this.node.scale = EditorGUILayout.Vector3Field("scale", this.node.scale);
             this.parent = EditorGUILayout.ObjectField("parent", this.parent, typeof(NodeBehaviour), true) as NodeBehaviour;
+            if (this.parent != null)
+            {
+                this.node.parentName = this.parent.name;
+            }
         }
 
         private void holeNodeGUI()
@@ -130,15 +136,28 @@ namespace NodeLevelEditor
         private void acceptNode()
         {
             NodeDataManager.AddNode(this.node);
+            if (this.node.behaviour == null)
+            {
+                this.createNodeBehaviour();
+            }
             this.parentWindow.sceneChanged = true;
-            this.closeWindow();
-        }
-        private void closeWindow()
-        {
-            this.node = null;
+            this.accepted = true;
             this.Close();
         }
+        private void discardNode()
+        {
+            this.Close();
 
+        }
+
+        void OnDestroy()
+        {
+            if (!this.accepted && this.node.behaviour != null)
+            {
+                DestroyImmediate(this.node.behaviour.gameObject);
+            }
+            this.node = null;
+        }
 
         public static void ShowWindow(NodeManagerWindow parentWindow)
         {
