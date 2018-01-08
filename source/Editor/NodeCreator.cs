@@ -5,12 +5,20 @@ namespace NodeLevelEditor
 {
     public static class NodeCreator
     {
+        public delegate void OnNodeCreation(NodeBehaviour node);
+        /// <summary>
+        /// Use this event to modify new nodes. For example add tag or set layer
+        /// </summary>
+        public static event OnNodeCreation onNodeCreation;
         public static NodeBehaviour ProcessNewObject(GameObject go)
         {
             Debug.Assert(go.GetComponent<NodeBehaviour>() == null, "Component already has NodeBehaviour");
-            go.layer = LayerMask.NameToLayer("AutoGen");
-            go.tag = "EditorAutoGen";
-            return go.AddComponent<NodeBehaviour>();
+            var node = go.AddComponent<NodeBehaviour>();
+            if (onNodeCreation !=null)
+            {
+                onNodeCreation(node);
+            }
+            return node;
         }
         public abstract class Creator
         {
