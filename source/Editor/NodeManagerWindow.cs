@@ -162,12 +162,12 @@ namespace NodeLevelEditor
         }
         public void DeleteAutoGenObjects()
         {
-            var gos = GameObject.FindGameObjectsWithTag("EditorAutoGen");
-            foreach (var go in gos)
+            var nodes = FindObjectsOfType<NodeBehaviour>();
+            foreach (var node in nodes)
             {
-                if (go != null && go.activeInHierarchy) // dont destroy disabled objects
+                if (node != null && node.gameObject.activeInHierarchy) // dont destroy disabled objects
                 {
-                    DestroyImmediate(go);
+                    DestroyImmediate(node.gameObject);
                 }
             }
         }
