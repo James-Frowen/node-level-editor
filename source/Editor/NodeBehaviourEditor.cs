@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace ProjectGamma.LevelCreator
+namespace NodeLevelEditor
 {
     [CustomEditor(typeof(NodeBehaviour))]
     public class NodeBehaviourEditor : UnityEditor.Editor

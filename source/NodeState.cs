@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 
-
-namespace ProjectGamma.LevelCreator
+namespace NodeLevelEditor
 {
     [System.Serializable]
     public class NodeState

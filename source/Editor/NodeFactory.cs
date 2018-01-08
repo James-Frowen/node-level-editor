@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-namespace ProjectGamma.LevelCreator
+namespace NodeLevelEditor
 {
     public class NodeFactory
     {

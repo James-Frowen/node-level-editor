@@ -2,7 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
-namespace ProjectGamma.LevelCreator
+
+namespace NodeLevelEditor
 {
     [ExecuteInEditMode]
     public class NodeBehaviour : MonoBehaviour, INodeStateHolder

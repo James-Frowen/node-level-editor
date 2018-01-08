@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using System.IO;
 
-namespace ProjectGamma.LevelCreator
+namespace NodeLevelEditor
 {
     public class NodeDataManager
     {

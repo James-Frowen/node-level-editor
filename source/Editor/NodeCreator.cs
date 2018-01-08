@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace ProjectGamma.LevelCreator
+namespace NodeLevelEditor
 {
     public static class NodeCreator
     {

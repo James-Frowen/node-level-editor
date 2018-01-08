@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace ProjectGamma.LevelCreator
+namespace NodeLevelEditor
 {
     public class NodeCreatorWindow : EditorWindow
     {

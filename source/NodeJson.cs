@@ -3,7 +3,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
-namespace ProjectGamma.LevelCreator
+namespace NodeLevelEditor
 {
     [Serializable]
     public class NodeJsonHolder
