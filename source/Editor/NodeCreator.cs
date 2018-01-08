@@ -63,7 +63,7 @@ namespace NodeLevelEditor
         {
             public EmptyCreator(string name, Vector3 position) : base(name, position) { }
             public EmptyCreator(string name, Vector3 position, Vector3 scale) : base(name, position, scale) { }
-            public EmptyCreator(Vector3 position, Vector3 scale) : base(StructureManager.NextName("empty"), position, scale) { }
+            public EmptyCreator(Vector3 position, Vector3 scale) : base(NodeDataManager.NextName("empty"), position, scale) { }
             public EmptyCreator(NodeJson json): base (json) { }
 
             protected override GameObject createGameObject()
@@ -81,7 +81,7 @@ namespace NodeLevelEditor
         {
             public QuadCreator(string name, Vector3 position) : base(name, position) { }
             public QuadCreator(string name, Vector3 position, Vector3 scale) : base(name, position, scale) { }
-            public QuadCreator(Vector3 position, Vector3 scale) : base(StructureManager.NextName("Quad"), position, scale) { }
+            public QuadCreator(Vector3 position, Vector3 scale) : base(NodeDataManager.NextName("Quad"), position, scale) { }
             public QuadCreator(NodeJson json): base (json) { }
 
             protected override GameObject createGameObject()
@@ -105,7 +105,7 @@ namespace NodeLevelEditor
         {
             public CubeCreator(string name, Vector3 position) : base(name, position) { }
             public CubeCreator(string name, Vector3 position, Vector3 scale) : base(name, position, scale) { }
-            public CubeCreator(Vector3 position, Vector3 scale) : base(StructureManager.NextName("cube") ,position, scale) { }
+            public CubeCreator(Vector3 position, Vector3 scale) : base(NodeDataManager.NextName("cube") ,position, scale) { }
             public CubeCreator(NodeJson json): base (json) { }
 
             public override NodeBehaviour Create()

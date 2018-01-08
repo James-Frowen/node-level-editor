@@ -59,13 +59,11 @@ namespace NodeLevelEditor
         {
             this.UnLoad(); // makes sure nothing is loaded at start
 
-            LevelCreatorWindow.onHoleCreate += this.levelCreator_onHoleCreate;
             NodeDataManager.onSave += this.nodeDataManager_onSave;
         }
 
         public void OnDisable()
         {
-            LevelCreatorWindow.onHoleCreate -= this.levelCreator_onHoleCreate;
             NodeDataManager.onSave -= this.nodeDataManager_onSave;
 
             this.UnLoad();
@@ -78,18 +76,6 @@ namespace NodeLevelEditor
                 this.savingNodeData = false;
                 return;
             }
-        }
-        private void levelCreator_onHoleCreate(HoleCreator holeCreator)
-        {
-            var hole = new NodeJson(
-                holeCreator.accecptedHoleParent.name,
-                holeCreator.accecptedPosition,
-                holeCreator.accecptedScale,
-                "",
-                NodeType.HOLE
-            );
-            NodeDataManager.AddNode(hole);
-            this.sceneChanged = true;
         }
 
         public void OnGUI()

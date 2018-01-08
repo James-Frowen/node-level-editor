@@ -68,7 +68,7 @@ namespace NodeLevelEditor
             {
                 if (_instance == null)
                 {
-                    if (AUTOLOAD)
+                    if (AUTOLOAD) // this may cause issues if loading data other than from ROOM_DATA_FILE
                     {
                         Load();
                     }
