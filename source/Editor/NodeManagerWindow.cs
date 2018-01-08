@@ -92,6 +92,7 @@ namespace NodeLevelEditor
             if (GUILayout.Button("unload"))
             {
                 this.UnLoad();
+                return;
             }
             if (GUILayout.Button("Save" + (NodeDataManager.NeedSave || this.sceneChanged ? " *" : "")))
             {
