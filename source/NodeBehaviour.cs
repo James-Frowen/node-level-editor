@@ -8,6 +8,26 @@ namespace NodeLevelEditor
     [ExecuteInEditMode]
     public class NodeBehaviour : MonoBehaviour, INodeStateHolder
     {
+        private static NodeBehaviour _rootParent;
+        public static NodeBehaviour RootParent
+        {
+            get
+            {
+                return _rootParent;
+            }
+            set
+            {
+                if (_rootParent == null)
+                {
+                    _rootParent = value;
+                }
+                else
+                {
+                    Debug.LogError("_rootParent for NodeBehaviour is already set");
+                }
+            }
+        }
+
         public const string DEFAULT_PARENT_NAME = "ROOT";
 
         [SerializeField] private NodeBehaviour parent;
@@ -38,12 +58,8 @@ namespace NodeLevelEditor
             var parentName = this.HasParent ? this.parent.name : "";
             if (updatedJson.parentName != parentName)
             {
-                this.RemoveParent();
-                if (parentName != "")
-                {
-                    var newParent = NodeDataManager.FindNode(parentName);
-                    this.SetParent(newParent);
-                }
+                var newParent = parentName == "" ? RootParent : NodeDataManager.FindNode(parentName);
+                this.ChangeParent(newParent);
             }
         }
 
@@ -182,6 +198,13 @@ namespace NodeLevelEditor
             }
         }
 
+        public void Start()
+        {
+            if (RootParent == null) { return; }
+            if (this.Parent != null) { return; }
+
+            this.SetParent(RootParent);
+        }
         public void OnEnable()
         {
             NodeDataManager.NodeEnabled(this);
