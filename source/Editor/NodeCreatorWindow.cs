@@ -28,7 +28,7 @@ namespace NodeLevelEditor
 
         private void createNodeBehaviour()
         {
-            var behaviour = NodeFactory.CreateNode(this.node);
+            NodeFactory.CreateNode(this.node);
         }
 
         public void OnEnable()
