@@ -12,6 +12,8 @@ namespace NodeLevelEditor
 
         public void Update()
         {
+            if (!NodeDataManager.IsLoaded) { return; }
+
             foreach (var node in NodeDataManager.NodeBehaviours)
             {
                 if (node.NodeState.StateChanged())
@@ -87,6 +89,10 @@ namespace NodeLevelEditor
         }
         private void loadedGUI()
         {
+            if (GUILayout.Button("unload"))
+            {
+                this.UnLoad();
+            }
             if (GUILayout.Button("Save" + (NodeDataManager.NeedSave || this.sceneChanged ? " *" : "")))
             {
                 this.Save();
@@ -121,7 +127,7 @@ namespace NodeLevelEditor
 
         public void Load()
         {
-            Debug.Log("Load Nodes");
+            Debug.Log("Loading Nodes");
             this.sceneChanged = false;
 
             this.DeleteAutoGenObjects();
@@ -143,6 +149,8 @@ namespace NodeLevelEditor
         }
         public void UnLoad()
         {
+            DeleteAutoGenObjects();
+            NodeDataManager.Unload();
         }
         public void Save()
         {

@@ -104,6 +104,10 @@ namespace NodeLevelEditor
                 return _instance;
             }
         }
+        public static void Unload()
+        {
+            _instance = null;
+        }
         public static void Load(string fileName)
         {
             _instance = new NodeDataManager();
