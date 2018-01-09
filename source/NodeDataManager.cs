@@ -89,6 +89,9 @@ namespace NodeLevelEditor
         public delegate void OnSave();
         public static event OnSave onSave;
 
+        public delegate void OnAddNode(NodeJson node);
+        public static event OnAddNode onAddNode;
+
         public const bool AUTOLOAD = true;
         public static bool IsLoaded { get { return _instance != null; } }
         private static NodeDataManager _instance;
@@ -144,6 +147,11 @@ namespace NodeLevelEditor
                     Instance.nodes.Add(json.behaviour);
                 }
                 Instance.needSave = true;
+
+                if (onAddNode !=null)
+                {
+                    onAddNode(json);
+                }
             }
             else
             {
