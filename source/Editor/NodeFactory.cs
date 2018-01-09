@@ -77,6 +77,8 @@ namespace NodeLevelEditor
                     return new NodeCreator.CubeCreator(json.name, json.position, json.scale);
                 case NodeType.HOLE:
                     return new NodeCreator.HoleCreator(json.name, json.position, json.scale);
+                case NodeType.QUAD:
+                    return new NodeCreator.QuadCreator(json.name, json.position, json.scale);
                 default:
                     throw new System.Exception("Node type not found: " + json.nodeType);
             }
