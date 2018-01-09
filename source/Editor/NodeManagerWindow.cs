@@ -114,9 +114,12 @@ namespace NodeLevelEditor
             {
                 NodeCreatorWindow.ShowWindow(this);
             }
-
+            if (GUILayout.Button("Cut Hole"))
+            {
+                NodeHoleCutter.CutHolesWithSelected();
+            }
         }
-
+       
         private NodeBehaviour activeNodeBehavior()
         {
             var active = Selection.activeGameObject;
