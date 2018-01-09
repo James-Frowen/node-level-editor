@@ -134,15 +134,19 @@ namespace NodeLevelEditor
             Debug.Log("Loading Nodes");
             this.sceneChanged = false;
 
-            this.DeleteAutoGenObjects();
+            NodeDataManager.Unload();
 
-            NodeBehaviour.RootParent = new NodeCreator.EmptyCreator(NodeBehaviour.DEFAULT_PARENT_NAME, Vector3.zero).Create();
             NodeDataManager.Load(NodeDataName.DataFileName);
+            this.createRootParent();
             var nodes = NodeFactory.CreateNodes(NodeDataManager.NodeJsons);
+        }
+        private void createRootParent()
+        {
+            NodeBehaviour.RootParent = new NodeCreator.EmptyCreator(NodeBehaviour.DEFAULT_PARENT_NAME, Vector3.zero).Create();
+            NodeBehaviour.RootParent.noJson = true;
         }
         public void UnLoad()
         {
-            DeleteAutoGenObjects();
             NodeDataManager.Unload();
         }
         public void Save()
@@ -154,23 +158,13 @@ namespace NodeLevelEditor
 
             foreach (var node in NodeDataManager.NodeBehaviours)
             {
+                Debug.Log(node.name);
                 if (node.nodeType == NodeType.HOLE) { continue; /* dont save hole? */ }
 
                 node.UpdateJson(); // updates json
                 node.NodeState.UpdateState();
             }
             NodeDataManager.Save();
-        }
-        public void DeleteAutoGenObjects()
-        {
-            var nodes = FindObjectsOfType<NodeBehaviour>();
-            foreach (var node in nodes)
-            {
-                if (node != null && node.gameObject.activeInHierarchy) // dont destroy disabled objects
-                {
-                    DestroyImmediate(node.gameObject);
-                }
-            }
         }
 
 

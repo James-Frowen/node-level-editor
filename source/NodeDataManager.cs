@@ -111,6 +111,18 @@ namespace NodeLevelEditor
         public static void Unload()
         {
             _instance = null;
+            DeleteAutoGenObjects();
+        }
+        public static void DeleteAutoGenObjects()
+        {
+            var nodes = UnityEngine.Object.FindObjectsOfType<NodeBehaviour>();
+            foreach (var node in nodes)
+            {
+                if (node != null && node.gameObject.activeInHierarchy) // dont destroy disabled objects
+                {
+                    UnityEngine.Object.DestroyImmediate(node.gameObject);
+                }
+            }
         }
         public static void Load(string fileName)
         {
@@ -141,6 +153,7 @@ namespace NodeLevelEditor
                 {
                     Debug.LogError("node with name already exist but instances are out of sync");
                 }
+
                 Instance.holder.nodes.Add(json);
                 if (json.behaviour != null)
                 {
