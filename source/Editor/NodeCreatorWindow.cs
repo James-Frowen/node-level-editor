@@ -26,8 +26,16 @@ namespace NodeLevelEditor
             if (this.node == null) { return; }
 
             if (this.node.behaviour == null) { this.createNodeBehaviour(); }
-
-            this.node.behaviour.UpdateFromJson();
+           
+            if (this.node.behaviour.NodeState.StateChanged())
+            {
+                this.node.behaviour.UpdateJson();
+            }
+            else
+            {
+                this.node.behaviour.UpdateFromJson();
+            }
+            this.node.behaviour.NodeState.UpdateState();
         }
 
         private void createNodeBehaviour()
@@ -112,10 +120,7 @@ namespace NodeLevelEditor
             this.node.position = EditorGUILayout.Vector3Field("position", this.node.position);
             this.node.scale = EditorGUILayout.Vector3Field("scale", this.node.scale);
             this.parent = EditorGUILayout.ObjectField("parent", this.parent, typeof(NodeBehaviour), true) as NodeBehaviour;
-            if (this.parent != null)
-            {
-                this.node.parentName = this.parent.name;
-            }
+            this.node.parentName = this.parent != null ? this.parent.name : "";
         }
 
         private void holeNodeGUI()
