@@ -168,7 +168,7 @@ namespace NodeLevelEditor
             }
             else
             {
-                Debug.LogWarning("node already in holder");
+                Debug.LogWarning("Can not add node already in holder");
             }
         }
         public static void RemoveNode(NodeJson node)
@@ -180,7 +180,7 @@ namespace NodeLevelEditor
             }
             else
             {
-                Debug.LogWarning("node is not in holder");
+                Debug.LogWarning("Can not remove node that is not in holder");
             }
         }
         public static bool NodeJsonExist(NodeJson json)

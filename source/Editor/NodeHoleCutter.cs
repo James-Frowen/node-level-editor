@@ -36,6 +36,7 @@ namespace NodeLevelEditor
             var cSca = wall.rotation * cutter.localScale;
 
             var pos = wall.rotation * (cPos - wPos);
+            pos.x = -pos.x;
             pos.z = 0;
             var sca = new Vector2(Mathf.Abs(cSca.x), Mathf.Abs(cSca.y));
 
