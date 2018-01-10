@@ -13,7 +13,7 @@ namespace NodeLevelEditor.Tests
         private List<NodeJson> nodesCreated;
 
         private delegate void TestHoleJson(NodeJson hole);
-        private void runCutHoleTest(Vector3 cutterPos, Vector3 cutterSca, TestHoleJson testHoleJson)
+        private void runCutHoleTest(Vector3 cutterPos, Vector3 cutterSca, TestHoleJson testHoleJson, int holeCount = 2)
         {
             createCube(0, 0, 0);
             createCube(6, 0, 0);
@@ -25,7 +25,7 @@ namespace NodeLevelEditor.Tests
             NodeDataManager.onAddNode += this.onAddNode;
             NodeHoleCutter.CutHoles(cutter);
 
-            Assert.AreEqual(2, this.nodesCreated.Count, "There are 2 holes");
+            Assert.AreEqual(holeCount, this.nodesCreated.Count, string.Format("There are {0} holes", holeCount));
             foreach (var hole in this.nodesCreated)
             {
                 Assert.AreEqual(NodeType.HOLE, hole.nodeType);
@@ -51,6 +51,21 @@ namespace NodeLevelEditor.Tests
             CleanUp();
         }
         [NUnit.Framework.Test]
+        public void CutsNoHolesWhenCubeIsFarAway()
+        {
+            Init();
+            runCutHoleTest(
+                new Vector3(3, 70, 0),
+                new Vector3(2, 2, 2),
+                (hole) =>
+                {
+                    NUnit.Framework.Assert.Fail("Hole was created when none should have been");
+                }, 0);
+            CleanUp();
+        }
+
+
+        [NUnit.Framework.Test]
         public void CutsHoleWhenCubeIsInCenter()
         {
             runCutOneHoletest(
@@ -60,6 +75,7 @@ namespace NodeLevelEditor.Tests
                 new Vector2(2, 2)
                 );
         }
+
         [NUnit.Framework.Test]
         public void CutsHoleWhenCuboidIsInCenter()
         {
@@ -135,6 +151,96 @@ namespace NodeLevelEditor.Tests
         }
 
         [NUnit.Framework.Test]
+        public void CutsHoleWhenCuboidIsNotInCenter()
+        {
+            runCutOneHoletest(
+                new Vector3(3, 1.2f, 1.2f),
+                new Vector3(3, 0.4f, 1.2f),
+                (hole) => {
+                    if (hole.behaviour.name.Contains("right"))
+                    {
+                        Assert.AreApproximatelyEqual(-1.2f, hole.position.x, "hole has right X pos");
+                        Assert.AreApproximatelyEqual(1.2f, hole.position.y, "hole has right Y pos");
+                        Assert.AreApproximatelyEqual(1.2f, hole.scale.x, "hole has right X sca");
+                        Assert.AreApproximatelyEqual(0.4f, hole.scale.y, "hole has right Y sca");
+                    }
+                    if (hole.behaviour.name.Contains("left"))
+                    {
+                        Assert.AreApproximatelyEqual(1.2f, hole.position.x, "hole has right X pos");
+                        Assert.AreApproximatelyEqual(1.2f, hole.position.y, "hole has right Y pos");
+                        Assert.AreApproximatelyEqual(1.2f, hole.scale.x, "hole has right X sca");
+                        Assert.AreApproximatelyEqual(0.4f, hole.scale.y, "hole has right Y sca");
+                    }
+                });
+            runCutOneHoletest(
+                new Vector3(3, -0.75f, -0.1f),
+                new Vector3(3, 3.2f, 4f),
+                (hole) => {
+                    if (hole.behaviour.name.Contains("right"))
+                    {
+                        Assert.AreApproximatelyEqual(0.1f, hole.position.x, "hole has right X pos");
+                        Assert.AreApproximatelyEqual(-0.75f, hole.position.y, "hole has right Y pos");
+                        Assert.AreApproximatelyEqual(4f, hole.scale.x, "hole has right X sca");
+                        Assert.AreApproximatelyEqual(3.2f, hole.scale.y, "hole has right Y sca");
+                    }
+                    if (hole.behaviour.name.Contains("left"))
+                    {
+                        Assert.AreApproximatelyEqual(-0.1f, hole.position.x, "hole has right X pos");
+                        Assert.AreApproximatelyEqual(-0.75f, hole.position.y, "hole has right Y pos");
+                        Assert.AreApproximatelyEqual(4f, hole.scale.x, "hole has right X sca");
+                        Assert.AreApproximatelyEqual(3.2f, hole.scale.y, "hole has right Y sca");
+                    }
+                });
+        }
+
+        [NUnit.Framework.Test]
+        public void CutsHoleWhenInOtherSides()
+        {
+            Init();
+            createCube(0, 0, 0);
+            var cutter = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            var cutterPos = new Vector3(3, 3, 3);
+            var cutterSca = new Vector3(4, 4, 4);
+            cutter.transform.position = cutterPos;
+            cutter.transform.localScale = cutterSca;
+            Debug.Log(string.Format("testing cutter with pos:{0} sca:{1}", cutterPos, cutterSca));
+
+            NodeDataManager.onAddNode += this.onAddNode;
+            NodeHoleCutter.CutHoles(cutter);
+
+            Assert.AreEqual(3, this.nodesCreated.Count, "There are 3 holes");
+            foreach (var hole in this.nodesCreated)
+            {
+                Assert.AreEqual(NodeType.HOLE, hole.nodeType);
+
+                if (hole.behaviour.name.Contains("right"))
+                {
+                    Assert.AreApproximatelyEqual(-1.75f, hole.position.x, "hole has right X pos");
+                    Assert.AreApproximatelyEqual(1.75f, hole.position.y, "hole has right Y pos");
+                    Assert.AreApproximatelyEqual(1.5f, hole.scale.x, "hole has right X sca");
+                    Assert.AreApproximatelyEqual(1.5f, hole.scale.y, "hole has right Y sca");
+                }
+                if (hole.behaviour.name.Contains("front"))
+                {
+                    Assert.AreApproximatelyEqual(1.75f, hole.position.x, "hole has right X pos");
+                    Assert.AreApproximatelyEqual(1.75f, hole.position.y, "hole has right Y pos");
+                    Assert.AreApproximatelyEqual(1.5f, hole.scale.x, "hole has right X sca");
+                    Assert.AreApproximatelyEqual(1.5f, hole.scale.y, "hole has right Y sca");
+                }
+                if (hole.behaviour.name.Contains("top"))
+                {
+                    Assert.AreApproximatelyEqual(1.75f, hole.position.x, "hole has right X pos");
+                    Assert.AreApproximatelyEqual(-1.75f, hole.position.y, "hole has right Y pos");
+                    Assert.AreApproximatelyEqual(1.5f, hole.scale.x, "hole has right X sca");
+                    Assert.AreApproximatelyEqual(1.5f, hole.scale.y, "hole has right Y sca");
+                }
+            }
+
+            NodeDataManager.onAddNode -= this.onAddNode;
+            CleanUp();  
+        }
+
+        [NUnit.Framework.Test]
         public void Cuts2HoleWhenCubeIsNotInCenter()
         {
             Init();
@@ -177,6 +283,85 @@ namespace NodeLevelEditor.Tests
                         Assert.AreApproximatelyEqual(0.4f, hole.scale.y, "hole has right Y sca");
                     }
                 });
+            CleanUp();
+        }
+
+        [NUnit.Framework.Test]
+        public void CutHolesWhenCubeIsInCornerOutSideOfQuad()
+        {
+            Init();
+            createCube(0, 0, 0);
+            NodeDataManager.onAddNode += this.onAddNode;
+
+            var cutter = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            var cutterPos = new Vector3(3, 0, 0);
+            var cutterSca = new Vector3(2, 2, 2);
+            cutter.transform.localScale = cutterSca;
+            Debug.Log(string.Format("testing cutter with pos:{0} sca:{1}", cutterPos, cutterSca));
+
+            cutter.transform.position = new Vector3(3, 0.8f, 1.2f);
+            NodeHoleCutter.CutHoles(cutter);
+            cutter.transform.position = new Vector3(-3, 0.8f, 1.2f);
+            NodeHoleCutter.CutHoles(cutter);
+            cutter.transform.position = new Vector3(0.8f, 3, 1.2f);
+            NodeHoleCutter.CutHoles(cutter);
+            cutter.transform.position = new Vector3(0.8f, -3, 1.2f);
+            NodeHoleCutter.CutHoles(cutter);
+            cutter.transform.position = new Vector3(0.8f, 1.2f, 3);
+            NodeHoleCutter.CutHoles(cutter);
+            cutter.transform.position = new Vector3(0.8f, 1.2f, -3);
+            NodeHoleCutter.CutHoles(cutter);
+
+            Assert.AreEqual(6, this.nodesCreated.Count, "There are 3 holes");
+            foreach (var hole in this.nodesCreated)
+            {
+                Assert.AreEqual(NodeType.HOLE, hole.nodeType);
+
+                if (hole.behaviour.name.Contains("right"))
+                {
+                    Assert.AreApproximatelyEqual(-1.2f, hole.position.x, "hole has right X pos");
+                    Assert.AreApproximatelyEqual(0.8f, hole.position.y, "hole has right Y pos");
+                    Assert.AreApproximatelyEqual(2f, hole.scale.x, "hole has right X sca");
+                    Assert.AreApproximatelyEqual(2f, hole.scale.y, "hole has right Y sca");
+                }
+                if (hole.behaviour.name.Contains("left"))
+                {
+                    Assert.AreApproximatelyEqual(1.2f, hole.position.x, "hole has right X pos");
+                    Assert.AreApproximatelyEqual(0.8f, hole.position.y, "hole has right Y pos");
+                    Assert.AreApproximatelyEqual(2f, hole.scale.x, "hole has right X sca");
+                    Assert.AreApproximatelyEqual(2f, hole.scale.y, "hole has right Y sca");
+                }
+                if (hole.behaviour.name.Contains("front"))
+                {
+                    Assert.AreApproximatelyEqual(0.8f, hole.position.x, "hole has right X pos");
+                    Assert.AreApproximatelyEqual(1.2f, hole.position.y, "hole has right Y pos");
+                    Assert.AreApproximatelyEqual(2f, hole.scale.x, "hole has right X sca");
+                    Assert.AreApproximatelyEqual(2f, hole.scale.y, "hole has right Y sca");
+                }
+                if (hole.behaviour.name.Contains("back"))
+                {
+                    Assert.AreApproximatelyEqual(-0.8f, hole.position.x, "hole has right X pos");
+                    Assert.AreApproximatelyEqual(1.2f, hole.position.y, "hole has right Y pos");
+                    Assert.AreApproximatelyEqual(2f, hole.scale.x, "hole has right X sca");
+                    Assert.AreApproximatelyEqual(2f, hole.scale.y, "hole has right Y sca");
+                }
+                if (hole.behaviour.name.Contains("top"))
+                {
+                    Assert.AreApproximatelyEqual(0.8f, hole.position.x, "hole has right X pos");
+                    Assert.AreApproximatelyEqual(-1.2f, hole.position.y, "hole has right Y pos");
+                    Assert.AreApproximatelyEqual(2f, hole.scale.x, "hole has right X sca");
+                    Assert.AreApproximatelyEqual(2f, hole.scale.y, "hole has right Y sca");
+                }
+                if (hole.behaviour.name.Contains("floor"))
+                {
+                    Assert.AreApproximatelyEqual(0.8f, hole.position.x, "hole has right X pos");
+                    Assert.AreApproximatelyEqual(1.2f, hole.position.y, "hole has right Y pos");
+                    Assert.AreApproximatelyEqual(2f, hole.scale.x, "hole has right X sca");
+                    Assert.AreApproximatelyEqual(2f, hole.scale.y, "hole has right Y sca");
+                }
+            }
+
+            NodeDataManager.onAddNode -= this.onAddNode;
             CleanUp();
         }
 
