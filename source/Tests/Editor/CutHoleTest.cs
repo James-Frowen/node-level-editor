@@ -11,19 +11,19 @@ namespace NodeLevelEditor.Tests
     public class CutHoleTest
     {
         private List<NodeJson> nodesCreated;
+        private GameObject cutter;
 
         private delegate void TestHoleJson(NodeJson hole);
         private void runCutHoleTest(Vector3 cutterPos, Vector3 cutterSca, TestHoleJson testHoleJson, int holeCount = 2)
         {
             createCube(0, 0, 0);
             createCube(6, 0, 0);
-            var cutter = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            cutter.transform.position = cutterPos;
-            cutter.transform.localScale = cutterSca;
+            this.cutter.transform.position = cutterPos;
+            this.cutter.transform.localScale = cutterSca;
             Debug.Log(string.Format("testing cutter with pos:{0} sca:{1}", cutterPos, cutterSca));
 
             NodeDataManager.onAddNode += this.onAddNode;
-            NodeHoleCutter.CutHoles(cutter);
+            NodeHoleCutter.CutHoles(this.cutter);
 
             Assert.AreEqual(holeCount, this.nodesCreated.Count, string.Format("There are {0} holes", holeCount));
             foreach (var hole in this.nodesCreated)
@@ -198,15 +198,14 @@ namespace NodeLevelEditor.Tests
         {
             Init();
             createCube(0, 0, 0);
-            var cutter = GameObject.CreatePrimitive(PrimitiveType.Cube);
             var cutterPos = new Vector3(3, 3, 3);
             var cutterSca = new Vector3(4, 4, 4);
-            cutter.transform.position = cutterPos;
-            cutter.transform.localScale = cutterSca;
+            this.cutter.transform.position = cutterPos;
+            this.cutter.transform.localScale = cutterSca;
             Debug.Log(string.Format("testing cutter with pos:{0} sca:{1}", cutterPos, cutterSca));
 
             NodeDataManager.onAddNode += this.onAddNode;
-            NodeHoleCutter.CutHoles(cutter);
+            NodeHoleCutter.CutHoles(this.cutter);
 
             Assert.AreEqual(3, this.nodesCreated.Count, "There are 3 holes");
             foreach (var hole in this.nodesCreated)
@@ -293,24 +292,23 @@ namespace NodeLevelEditor.Tests
             createCube(0, 0, 0);
             NodeDataManager.onAddNode += this.onAddNode;
 
-            var cutter = GameObject.CreatePrimitive(PrimitiveType.Cube);
             var cutterPos = new Vector3(3, 0, 0);
             var cutterSca = new Vector3(2, 2, 2);
-            cutter.transform.localScale = cutterSca;
+            this.cutter.transform.localScale = cutterSca;
             Debug.Log(string.Format("testing cutter with pos:{0} sca:{1}", cutterPos, cutterSca));
 
-            cutter.transform.position = new Vector3(3, 0.8f, 1.2f);
-            NodeHoleCutter.CutHoles(cutter);
-            cutter.transform.position = new Vector3(-3, 0.8f, 1.2f);
-            NodeHoleCutter.CutHoles(cutter);
-            cutter.transform.position = new Vector3(0.8f, 3, 1.2f);
-            NodeHoleCutter.CutHoles(cutter);
-            cutter.transform.position = new Vector3(0.8f, -3, 1.2f);
-            NodeHoleCutter.CutHoles(cutter);
-            cutter.transform.position = new Vector3(0.8f, 1.2f, 3);
-            NodeHoleCutter.CutHoles(cutter);
-            cutter.transform.position = new Vector3(0.8f, 1.2f, -3);
-            NodeHoleCutter.CutHoles(cutter);
+            this.cutter.transform.position = new Vector3(3, 0.8f, 1.2f);
+            NodeHoleCutter.CutHoles(this.cutter);
+            this.cutter.transform.position = new Vector3(-3, 0.8f, 1.2f);
+            NodeHoleCutter.CutHoles(this.cutter);
+            this.cutter.transform.position = new Vector3(0.8f, 3, 1.2f);
+            NodeHoleCutter.CutHoles(this.cutter);
+            this.cutter.transform.position = new Vector3(0.8f, -3, 1.2f);
+            NodeHoleCutter.CutHoles(this.cutter);
+            this.cutter.transform.position = new Vector3(0.8f, 1.2f, 3);
+            NodeHoleCutter.CutHoles(this.cutter);
+            this.cutter.transform.position = new Vector3(0.8f, 1.2f, -3);
+            NodeHoleCutter.CutHoles(this.cutter);
 
             Assert.AreEqual(6, this.nodesCreated.Count, "There are 3 holes");
             foreach (var hole in this.nodesCreated)
@@ -365,6 +363,46 @@ namespace NodeLevelEditor.Tests
             CleanUp();
         }
 
+        [NUnit.Framework.Test]
+        public void CutHoleWhenParentHaveScale()
+        {
+            Init();
+            // create cube inside of empty with scale, but cube is still 5*5*5 to world
+            var empty1Json = new NodeJson("empty1Json", new Vector3(0, 0, 0), new Vector3(5, 2, 1), "", NodeType.EMPTY) ;
+            NodeDataManager.AddNode(empty1Json);
+            NodeFactory.CreateNode(empty1Json);
+            var empty2Json = new NodeJson("empty2Json", new Vector3(0, 0, 0), new Vector3(1, 2, 2), "", NodeType.EMPTY) { parentName= "empty1Json" };
+            NodeDataManager.AddNode(empty2Json);
+            NodeFactory.CreateNode(empty2Json);
+            var cubeJson = new NodeJson("cubeJson", new Vector3(0, 0, 0), new Vector3(1, 1.2f, 2.4f), "", NodeType.CUBE) { parentName = "empty2Json" };
+            NodeDataManager.AddNode(cubeJson);
+            NodeFactory.CreateNode(cubeJson);
+
+            var cutterPos = new Vector3(3, 0, 0);
+            var cutterSca = new Vector3(2, 2, 2);
+            this.cutter.transform.position = cutterPos;
+            this.cutter.transform.localScale = cutterSca;
+            Debug.Log(string.Format("testing cutter with pos:{0} sca:{1}", cutterPos, cutterSca));
+
+            NodeDataManager.onAddNode += this.onAddNode;
+            NodeHoleCutter.CutHoles(this.cutter);
+
+            var holeCount = 1;
+            Assert.AreEqual(holeCount, this.nodesCreated.Count, string.Format("There are {0} holes", holeCount));
+            foreach (var hole in this.nodesCreated)
+            {
+                Assert.AreEqual(NodeType.HOLE, hole.nodeType);
+
+                Assert.AreApproximatelyEqual(0, hole.position.x, "hole has right X pos");
+                Assert.AreApproximatelyEqual(0, hole.position.y, "hole has right Y pos");
+                Assert.AreApproximatelyEqual(2, hole.scale.x, "hole has right X sca");
+                Assert.AreApproximatelyEqual(2, hole.scale.y, "hole has right Y sca");
+            }
+
+            NodeDataManager.onAddNode -= this.onAddNode;
+            CleanUp();
+        }
+
         private void onAddNode(NodeJson node)
         {
             this.nodesCreated.Add(node);
@@ -380,10 +418,12 @@ namespace NodeLevelEditor.Tests
         public void Init()
         {
             NodeDataManager.Load("");
+            this.cutter = GameObject.CreatePrimitive(PrimitiveType.Cube);
             this.nodesCreated = new List<NodeJson>();
         }
         public void CleanUp()
         {
+            Object.DestroyImmediate(this.cutter);
             NodeDataManager.Unload();
             this.nodesCreated = null;
         }
