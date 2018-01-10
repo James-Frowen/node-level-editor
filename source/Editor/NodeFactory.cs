@@ -72,13 +72,13 @@ namespace NodeLevelEditor
             switch (json.nodeType)
             {
                 case NodeType.EMPTY:
-                    return new NodeCreator.EmptyCreator(json.name, json.position);
+                    return new NodeCreator.EmptyCreator(json);
                 case NodeType.CUBE:
-                    return new NodeCreator.CubeCreator(json.name, json.position, json.scale);
+                    return new NodeCreator.CubeCreator(json);
                 case NodeType.HOLE:
-                    return new NodeCreator.HoleCreator(json.name, json.position, json.scale);
+                    return new NodeCreator.HoleCreator(json);
                 case NodeType.QUAD:
-                    return new NodeCreator.QuadCreator(json.name, json.position, json.scale);
+                    return new NodeCreator.QuadCreator(json);
                 default:
                     throw new System.Exception("Node type not found: " + json.nodeType);
             }
