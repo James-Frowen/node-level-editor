@@ -55,5 +55,12 @@ namespace NodeLevelEditor
             }
         }
         public string dataFileName;
+        private void Update()
+        {
+            if (!this.dataFileName.EndsWith(".json"))
+            {
+                this.dataFileName = this.dataFileName + ".json";
+            }
+        }
     }
 }
