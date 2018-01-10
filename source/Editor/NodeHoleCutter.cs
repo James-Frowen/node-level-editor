@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -31,19 +32,41 @@ namespace NodeLevelEditor
         }
         private static void cutHole(Transform cutter, Transform wall)
         {
-            var wPos = wall.position;
-            var cPos = cutter.position;
-            var cSca = wall.rotation * cutter.localScale;
+            var position = calculateHolePosition(cutter, wall);
+            var scale = calculateHoleScale(cutter, wall);
 
-            var pos = wall.rotation * (cPos - wPos);
-            pos.x = -pos.x;
-            pos.z = 0;
-            var sca = new Vector2(Mathf.Abs(cSca.x), Mathf.Abs(cSca.y));
+            var parentScale = getParentScale(wall);
+            var scaledPos = Helper.InverseScale(position, parentScale);
+            var scaledSca = Helper.InverseScale(scale, parentScale);
 
-            var hole = new NodeJson(wall.name, pos, sca, "", NodeType.HOLE);
+            var hole = new NodeJson(wall.name, scaledPos, scaledSca, "", NodeType.HOLE);
 
             NodeDataManager.AddNode(hole);
             NodeFactory.CreateNode(hole);
         }
+
+        private static Vector3 calculateHolePosition(Transform cutter, Transform wall)
+        {
+            var wPos = wall.position;
+            var cPos = cutter.position;
+
+            var pos = Quaternion.Inverse(wall.rotation) * (cPos - wPos);
+            pos.z = 0;
+            return pos;
+        }
+
+        private static Vector3 calculateHoleScale(Transform cutter, Transform wall)
+        {
+            var cSca = wall.rotation * cutter.localScale;
+
+            return new Vector2(Mathf.Abs(cSca.x), Mathf.Abs(cSca.y)); ;
+        }
+
+        private static Vector3 getParentScale(Transform wall)
+        {
+            return wall.parent.lossyScale;
+        }
+
+
     }
 }

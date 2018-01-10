@@ -14,10 +14,8 @@ namespace NodeLevelEditor.Tests
         private GameObject cutter;
 
         private delegate void TestHoleJson(NodeJson hole);
-        private void runCutHoleTest(Vector3 cutterPos, Vector3 cutterSca, TestHoleJson testHoleJson, int holeCount = 2)
+        private void runCutHoleTest(Vector3 cutterPos, Vector3 cutterSca, TestHoleJson testHoleJson, int expecteHoleCount = 2)
         {
-            createCube(0, 0, 0);
-            createCube(6, 0, 0);
             this.cutter.transform.position = cutterPos;
             this.cutter.transform.localScale = cutterSca;
             Debug.Log(string.Format("testing cutter with pos:{0} sca:{1}", cutterPos, cutterSca));
@@ -25,7 +23,7 @@ namespace NodeLevelEditor.Tests
             NodeDataManager.onAddNode += this.onAddNode;
             NodeHoleCutter.CutHoles(this.cutter);
 
-            Assert.AreEqual(holeCount, this.nodesCreated.Count, string.Format("There are {0} holes", holeCount));
+            Assert.AreEqual(expecteHoleCount, this.nodesCreated.Count, string.Format("There are not {0} holes", expecteHoleCount));
             foreach (var hole in this.nodesCreated)
             {
                 Assert.AreEqual(NodeType.HOLE, hole.nodeType);
@@ -47,6 +45,8 @@ namespace NodeLevelEditor.Tests
         private void runCutOneHoletest(Vector3 cutterPos, Vector3 cutterSca, TestHoleJson testHoleJson)
         {
             Init();
+            createCube(0, 0, 0);
+            createCube(6, 0, 0);
             runCutHoleTest(cutterPos, cutterSca, testHoleJson);
             CleanUp();
         }
@@ -194,7 +194,7 @@ namespace NodeLevelEditor.Tests
         }
 
         [NUnit.Framework.Test]
-        public void CutsHoleWhenInOtherSides()
+        public void CutHolesWhenCubeCornerOutSideOfQuad()
         {
             Init();
             createCube(0, 0, 0);
@@ -207,7 +207,7 @@ namespace NodeLevelEditor.Tests
             NodeDataManager.onAddNode += this.onAddNode;
             NodeHoleCutter.CutHoles(this.cutter);
 
-            Assert.AreEqual(3, this.nodesCreated.Count, "There are 3 holes");
+            Assert.AreEqual(3, this.nodesCreated.Count, "There are not 3 holes");
             foreach (var hole in this.nodesCreated)
             {
                 Assert.AreEqual(NodeType.HOLE, hole.nodeType);
@@ -239,10 +239,13 @@ namespace NodeLevelEditor.Tests
             CleanUp();  
         }
 
+
         [NUnit.Framework.Test]
-        public void Cuts2HoleWhenCubeIsNotInCenter()
+        public void Cuts2HoleInUniform()
         {
             Init();
+            createCube(0, 0, 0);
+            createCube(6, 0, 0);
             runCutHoleTest(
                 new Vector3(3, 1.2f, 1.2f),
                 new Vector3(2, 2, 2),
@@ -286,7 +289,60 @@ namespace NodeLevelEditor.Tests
         }
 
         [NUnit.Framework.Test]
-        public void CutHolesWhenCubeIsInCornerOutSideOfQuad()
+        public void Cuts2HoleInNonUniformRoom()
+        {
+            Init();
+            var cube1 = new NodeJson(NodeDataManager.NextName(NodeType.CUBE), new Vector3(0, 0, 0), new Vector3(4, 3, 5), "", NodeType.CUBE);
+            NodeDataManager.AddNode(cube1);
+            NodeFactory.CreateNode(cube1);
+            var cube2 = new NodeJson(NodeDataManager.NextName(NodeType.CUBE), new Vector3(6, 0, 0), new Vector3(6, 5, 4), "", NodeType.CUBE);
+            NodeDataManager.AddNode(cube2);
+            NodeFactory.CreateNode(cube2);
+
+            runCutHoleTest(
+                new Vector3(2.5f, -0.5f, 1f),
+                new Vector3(2, 0.5f, 0.8f),
+                (hole) => {
+                    if (hole.behaviour.name.Contains("right"))
+                    {
+                        Assert.AreApproximatelyEqual(-1f, hole.position.x, "hole has wrong X pos");
+                        Assert.AreApproximatelyEqual(-0.5f, hole.position.y, "hole has wrong Y pos");
+                        Assert.AreApproximatelyEqual(0.8f, hole.scale.x, "hole has wrong X sca");
+                        Assert.AreApproximatelyEqual(0.5f, hole.scale.y, "hole has wrong Y sca");
+                    }
+                    if (hole.behaviour.name.Contains("left"))
+                    {
+                        Assert.AreApproximatelyEqual(1f, hole.position.x, "hole has wrong X pos");
+                        Assert.AreApproximatelyEqual(-0.5f, hole.position.y, "hole has wrong Y pos");
+                        Assert.AreApproximatelyEqual(0.8f, hole.scale.x, "hole has wrong X sca");
+                        Assert.AreApproximatelyEqual(0.5f, hole.scale.y, "hole has wrong Y sca");
+                    }
+                });
+            this.nodesCreated.Clear();
+            runCutHoleTest(
+                new Vector3(2.5f, 0.75f, -0.5f),
+                new Vector3(2, 0.5f, 0.8f),
+                (hole) => {
+                    if (hole.behaviour.name.Contains("right"))
+                    {
+                        Assert.AreApproximatelyEqual(0.1f, hole.position.x, "hole has wrong X pos");
+                        Assert.AreApproximatelyEqual(0.125f/3f, hole.position.y, "hole has wrong Y pos");
+                        Assert.AreApproximatelyEqual(0.16f, hole.scale.x, "hole has wrong X sca");
+                        Assert.AreApproximatelyEqual(0.5f/3f, hole.scale.y, "hole has wrong Y sca");
+                    }
+                    if (hole.behaviour.name.Contains("left"))
+                    {
+                        Assert.AreApproximatelyEqual(-0.125f, hole.position.x, "hole has wrong X pos");
+                        Assert.AreApproximatelyEqual(-0.075f, hole.position.y, "hole has wrong Y pos");
+                        Assert.AreApproximatelyEqual(0.2f, hole.scale.x, "hole has wrong X sca");
+                        Assert.AreApproximatelyEqual(0.1f, hole.scale.y, "hole has wrong Y sca");
+                    }
+                });
+            CleanUp();
+        }
+
+        [NUnit.Framework.Test]
+        public void CutsHoleWhenInOtherSides()
         {
             Init();
             createCube(0, 0, 0);
@@ -310,52 +366,52 @@ namespace NodeLevelEditor.Tests
             this.cutter.transform.position = new Vector3(0.8f, 1.2f, -3);
             NodeHoleCutter.CutHoles(this.cutter);
 
-            Assert.AreEqual(6, this.nodesCreated.Count, "There are 3 holes");
+            Assert.AreEqual(6, this.nodesCreated.Count, "There are not 6 holes");
             foreach (var hole in this.nodesCreated)
             {
                 Assert.AreEqual(NodeType.HOLE, hole.nodeType);
 
                 if (hole.behaviour.name.Contains("right"))
                 {
-                    Assert.AreApproximatelyEqual(-1.2f, hole.position.x, "hole has wrong X pos");
-                    Assert.AreApproximatelyEqual(0.8f, hole.position.y, "hole has wrong Y pos");
-                    Assert.AreApproximatelyEqual(2f, hole.scale.x, "hole has wrong X sca");
-                    Assert.AreApproximatelyEqual(2f, hole.scale.y, "hole has wrong Y sca");
+                    Assert.AreApproximatelyEqual(-1.2f, hole.position.x, "right hole has wrong X pos");
+                    Assert.AreApproximatelyEqual(0.8f, hole.position.y, "right hole has wrong Y pos");
+                    Assert.AreApproximatelyEqual(2f, hole.scale.x, "right hole has wrong X sca");
+                    Assert.AreApproximatelyEqual(2f, hole.scale.y, "right hole has wrong Y sca");
                 }
                 if (hole.behaviour.name.Contains("left"))
                 {
-                    Assert.AreApproximatelyEqual(1.2f, hole.position.x, "hole has wrong X pos");
-                    Assert.AreApproximatelyEqual(0.8f, hole.position.y, "hole has wrong Y pos");
-                    Assert.AreApproximatelyEqual(2f, hole.scale.x, "hole has wrong X sca");
-                    Assert.AreApproximatelyEqual(2f, hole.scale.y, "hole has wrong Y sca");
+                    Assert.AreApproximatelyEqual(1.2f, hole.position.x, "left hole has wrong X pos");
+                    Assert.AreApproximatelyEqual(0.8f, hole.position.y, "left hole has wrong Y pos");
+                    Assert.AreApproximatelyEqual(2f, hole.scale.x, "left hole has wrong X sca");
+                    Assert.AreApproximatelyEqual(2f, hole.scale.y, "left hole has wrong Y sca");
                 }
                 if (hole.behaviour.name.Contains("front"))
                 {
-                    Assert.AreApproximatelyEqual(0.8f, hole.position.x, "hole has wrong X pos");
-                    Assert.AreApproximatelyEqual(1.2f, hole.position.y, "hole has wrong Y pos");
-                    Assert.AreApproximatelyEqual(2f, hole.scale.x, "hole has wrong X sca");
-                    Assert.AreApproximatelyEqual(2f, hole.scale.y, "hole has wrong Y sca");
+                    Assert.AreApproximatelyEqual(0.8f, hole.position.x, "front hole has wrong X pos");
+                    Assert.AreApproximatelyEqual(1.2f, hole.position.y, "front hole has wrong Y pos");
+                    Assert.AreApproximatelyEqual(2f, hole.scale.x, "front hole has wrong X sca");
+                    Assert.AreApproximatelyEqual(2f, hole.scale.y, "front hole has wrong Y sca");
                 }
                 if (hole.behaviour.name.Contains("back"))
                 {
-                    Assert.AreApproximatelyEqual(-0.8f, hole.position.x, "hole has wrong X pos");
-                    Assert.AreApproximatelyEqual(1.2f, hole.position.y, "hole has wrong Y pos");
-                    Assert.AreApproximatelyEqual(2f, hole.scale.x, "hole has wrong X sca");
-                    Assert.AreApproximatelyEqual(2f, hole.scale.y, "hole has wrong Y sca");
+                    Assert.AreApproximatelyEqual(-0.8f, hole.position.x, "back hole has wrong X pos");
+                    Assert.AreApproximatelyEqual(1.2f, hole.position.y, "back hole has wrong Y pos");
+                    Assert.AreApproximatelyEqual(2f, hole.scale.x, "back hole has wrong X sca");
+                    Assert.AreApproximatelyEqual(2f, hole.scale.y, "back hole has wrong Y sca");
                 }
                 if (hole.behaviour.name.Contains("top"))
                 {
-                    Assert.AreApproximatelyEqual(0.8f, hole.position.x, "hole has wrong X pos");
-                    Assert.AreApproximatelyEqual(-1.2f, hole.position.y, "hole has wrong Y pos");
-                    Assert.AreApproximatelyEqual(2f, hole.scale.x, "hole has wrong X sca");
-                    Assert.AreApproximatelyEqual(2f, hole.scale.y, "hole has wrong Y sca");
+                    Assert.AreApproximatelyEqual(0.8f, hole.position.x, "top hole has wrong X pos");
+                    Assert.AreApproximatelyEqual(-1.2f, hole.position.y, "top hole has wrong Y pos");
+                    Assert.AreApproximatelyEqual(2f, hole.scale.x, "top hole has wrong X sca");
+                    Assert.AreApproximatelyEqual(2f, hole.scale.y, "top hole has wrong Y sca");
                 }
                 if (hole.behaviour.name.Contains("floor"))
                 {
-                    Assert.AreApproximatelyEqual(0.8f, hole.position.x, "hole has wrong X pos");
-                    Assert.AreApproximatelyEqual(1.2f, hole.position.y, "hole has wrong Y pos");
-                    Assert.AreApproximatelyEqual(2f, hole.scale.x, "hole has wrong X sca");
-                    Assert.AreApproximatelyEqual(2f, hole.scale.y, "hole has wrong Y sca");
+                    Assert.AreApproximatelyEqual(0.8f, hole.position.x, "floor hole has wrong X pos");
+                    Assert.AreApproximatelyEqual(1.2f, hole.position.y, "floor hole has wrong Y pos");
+                    Assert.AreApproximatelyEqual(2f, hole.scale.x, "floor hole has wrong X sca");
+                    Assert.AreApproximatelyEqual(2f, hole.scale.y, "floor hole has wrong Y sca");
                 }
             }
 
@@ -363,22 +419,20 @@ namespace NodeLevelEditor.Tests
             CleanUp();
         }
 
-        [NUnit.Framework.Test]
-        public void CutHoleWhenParentHaveScale()
+        [UnityTest]
+        public IEnumerator CutHoleWhenParentHaveScale()
         {
             Init();
             // create cube inside of empty with scale, but cube is still 5*5*5 to world
             var empty1Json = new NodeJson("empty1Json", new Vector3(0, 0, 0), new Vector3(5, 2, 1), "", NodeType.EMPTY) ;
             NodeDataManager.AddNode(empty1Json);
-            NodeFactory.CreateNode(empty1Json);
             var empty2Json = new NodeJson("empty2Json", new Vector3(0, 0, 0), new Vector3(1, 2, 2), "", NodeType.EMPTY) { parentName= "empty1Json" };
             NodeDataManager.AddNode(empty2Json);
-            NodeFactory.CreateNode(empty2Json);
             var cubeJson = new NodeJson("cubeJson", new Vector3(0, 0, 0), new Vector3(1, 1.2f, 2.4f), "", NodeType.CUBE) { parentName = "empty2Json" };
             NodeDataManager.AddNode(cubeJson);
-            NodeFactory.CreateNode(cubeJson);
+            NodeFactory.CreateNodes(NodeDataManager.NodeJsons);
 
-            var cutterPos = new Vector3(3, 0, 0);
+            var cutterPos = new Vector3(3, 0.5f, -1);
             var cutterSca = new Vector3(2, 2, 2);
             this.cutter.transform.position = cutterPos;
             this.cutter.transform.localScale = cutterSca;
@@ -386,17 +440,18 @@ namespace NodeLevelEditor.Tests
 
             NodeDataManager.onAddNode += this.onAddNode;
             NodeHoleCutter.CutHoles(this.cutter);
+            yield return null;
 
             var holeCount = 1;
-            Assert.AreEqual(holeCount, this.nodesCreated.Count, string.Format("There are {0} holes", holeCount));
+            Assert.AreEqual(holeCount, this.nodesCreated.Count, string.Format("There are not {0} holes", holeCount));
             foreach (var hole in this.nodesCreated)
             {
                 Assert.AreEqual(NodeType.HOLE, hole.nodeType);
 
-                Assert.AreApproximatelyEqual(0, hole.position.x, "hole has wrong X pos");
-                Assert.AreApproximatelyEqual(0, hole.position.y, "hole has wrong Y pos");
-                Assert.AreApproximatelyEqual(2, hole.scale.x, "hole has wrong X sca");
-                Assert.AreApproximatelyEqual(2, hole.scale.y, "hole has wrong Y sca");
+                Assert.AreApproximatelyEqual(0.2f, hole.position.x, "hole has wrong X pos");
+                Assert.AreApproximatelyEqual(0.125f, hole.position.y, "hole has wrong Y pos");
+                Assert.AreApproximatelyEqual(0.4f, hole.scale.x, "hole has wrong X sca");
+                Assert.AreApproximatelyEqual(0.5f, hole.scale.y, "hole has wrong Y sca");
             }
 
             NodeDataManager.onAddNode -= this.onAddNode;

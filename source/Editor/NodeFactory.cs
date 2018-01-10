@@ -45,18 +45,12 @@ namespace NodeLevelEditor
             var nextLoop = new List<NodeJson>();
             foreach (var json in nodes)
             {
-                var parentExist = currentNodes.Any(n => n.name == json.parentName);
-
-                if (parentExist)
+                NodeBehaviour node;
+                if (findAndSetParent(json, currentNodes, out node))
                 {
-                    var node = CreateNode(json);
-                    var parent = currentNodes.Find(n => n.name == json.parentName);
-                    node.SetParent(parent);
-
                     currentNodes.Add(node);
                 }
-                else
-                {
+                else{
                     nextLoop.Add(json);
                 }
             }
@@ -65,6 +59,30 @@ namespace NodeLevelEditor
             {
                 createNodesWithParent(nextLoop, currentNodes, nextLoop.Count);
             }
+        }
+
+        private static bool findAndSetParent(NodeJson json, List<NodeBehaviour> currentNodes, out NodeBehaviour node)
+        {
+            var parentExist = currentNodes.Any(n => n.name == json.parentName);
+
+            if (parentExist)
+            {
+                node = CreateNode(json);
+                var parent = currentNodes.Find(n => n.name == json.parentName);
+                node.SetParent(parent);
+
+                return true;
+            }
+            else
+            {
+                node = null;
+                return false;   
+            }
+        }
+        private static bool findAndSetParent(NodeJson json, List<NodeBehaviour> currentNodes)
+        {
+            NodeBehaviour b;
+            return findAndSetParent(json, currentNodes, out b);
         }
 
         private static NodeCreator.Creator getNodeCreator(NodeJson json)
