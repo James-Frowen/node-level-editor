@@ -78,6 +78,12 @@ namespace NodeLevelEditor
 
             GUIHelper.HorizontalLine();
             this.noSelectPrimitive = GUILayout.Toggle(this.noSelectPrimitive, "no Select Primitive");
+            GUIHelper.HorizontalLine();
+            if (GUILayout.Button("Open Data File"))
+            {
+                var path = System.IO.Path.Combine(Application.dataPath, NodeDataName.DataFileName);
+                System.Diagnostics.Process.Start(path);
+            }
         }
         private void notLoadedGUI()
         {
@@ -108,7 +114,7 @@ namespace NodeLevelEditor
             {
                 var node = this.activeNodeBehavior();
                 NodeHelper.NormaliseScale(node);
-            }
+            }   
             GUIHelper.HorizontalLine();
             if (GUILayout.Button("New Node"))
             {
