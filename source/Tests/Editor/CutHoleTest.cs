@@ -38,10 +38,10 @@ namespace NodeLevelEditor.Tests
         private void runCutOneHoletest(Vector3 cutterPos, Vector3 cutterSca, Vector2 holePos, Vector2 holeSca)
         {
             runCutOneHoletest(cutterPos, cutterSca, (hole) => {
-                Assert.AreApproximatelyEqual(holePos.x, hole.position.x, "hole has right X pos");
-                Assert.AreApproximatelyEqual(holePos.y, hole.position.y, "hole has right Y pos");
-                Assert.AreApproximatelyEqual(holeSca.x, hole.scale.x, "hole has right X sca");
-                Assert.AreApproximatelyEqual(holeSca.y, hole.scale.y, "hole has right Y sca");
+                Assert.AreApproximatelyEqual(holePos.x, hole.position.x, "hole has wrong X pos");
+                Assert.AreApproximatelyEqual(holePos.y, hole.position.y, "hole has wrong Y pos");
+                Assert.AreApproximatelyEqual(holeSca.x, hole.scale.x, "hole has wrong X sca");
+                Assert.AreApproximatelyEqual(holeSca.y, hole.scale.y, "hole has wrong Y sca");
             });
         }
         private void runCutOneHoletest(Vector3 cutterPos, Vector3 cutterSca, TestHoleJson testHoleJson)
@@ -116,17 +116,17 @@ namespace NodeLevelEditor.Tests
                 (hole) => {
                     if (hole.behaviour.name.Contains("right"))
                     {
-                        Assert.AreApproximatelyEqual(1, hole.position.x, "hole has right X pos");
-                        Assert.AreApproximatelyEqual(0, hole.position.y, "hole has right Y pos");
-                        Assert.AreApproximatelyEqual(2, hole.scale.x, "hole has right X sca");
-                        Assert.AreApproximatelyEqual(2, hole.scale.y, "hole has right Y sca");
+                        Assert.AreApproximatelyEqual(1, hole.position.x, "hole has wrong X pos");
+                        Assert.AreApproximatelyEqual(0, hole.position.y, "hole has wrong Y pos");
+                        Assert.AreApproximatelyEqual(2, hole.scale.x, "hole has wrong X sca");
+                        Assert.AreApproximatelyEqual(2, hole.scale.y, "hole has wrong Y sca");
                     }
                     if (hole.behaviour.name.Contains("left"))
                     {
-                        Assert.AreApproximatelyEqual(-1, hole.position.x, "hole has right X pos");
-                        Assert.AreApproximatelyEqual(0, hole.position.y, "hole has right Y pos");
-                        Assert.AreApproximatelyEqual(2, hole.scale.x, "hole has right X sca");
-                        Assert.AreApproximatelyEqual(2, hole.scale.y, "hole has right Y sca");
+                        Assert.AreApproximatelyEqual(-1, hole.position.x, "hole has wrong X pos");
+                        Assert.AreApproximatelyEqual(0, hole.position.y, "hole has wrong Y pos");
+                        Assert.AreApproximatelyEqual(2, hole.scale.x, "hole has wrong X sca");
+                        Assert.AreApproximatelyEqual(2, hole.scale.y, "hole has wrong Y sca");
                     }
                 });
             runCutOneHoletest(
@@ -135,17 +135,17 @@ namespace NodeLevelEditor.Tests
                 (hole) => {
                     if (hole.behaviour.name.Contains("right"))
                     {
-                        Assert.AreApproximatelyEqual(-1, hole.position.x, "hole has right X pos");
-                        Assert.AreApproximatelyEqual(-1, hole.position.y, "hole has right Y pos");
-                        Assert.AreApproximatelyEqual(2, hole.scale.x, "hole has right X sca");
-                        Assert.AreApproximatelyEqual(2, hole.scale.y, "hole has right Y sca");
+                        Assert.AreApproximatelyEqual(-1, hole.position.x, "hole has wrong X pos");
+                        Assert.AreApproximatelyEqual(-1, hole.position.y, "hole has wrong Y pos");
+                        Assert.AreApproximatelyEqual(2, hole.scale.x, "hole has wrong X sca");
+                        Assert.AreApproximatelyEqual(2, hole.scale.y, "hole has wrong Y sca");
                     }
                     if (hole.behaviour.name.Contains("left"))
                     {
-                        Assert.AreApproximatelyEqual(1, hole.position.x, "hole has right X pos");
-                        Assert.AreApproximatelyEqual(-1, hole.position.y, "hole has right Y pos");
-                        Assert.AreApproximatelyEqual(2, hole.scale.x, "hole has right X sca");
-                        Assert.AreApproximatelyEqual(2, hole.scale.y, "hole has right Y sca");
+                        Assert.AreApproximatelyEqual(1, hole.position.x, "hole has wrong X pos");
+                        Assert.AreApproximatelyEqual(-1, hole.position.y, "hole has wrong Y pos");
+                        Assert.AreApproximatelyEqual(2, hole.scale.x, "hole has wrong X sca");
+                        Assert.AreApproximatelyEqual(2, hole.scale.y, "hole has wrong Y sca");
                     }
                 });
         }
@@ -159,17 +159,17 @@ namespace NodeLevelEditor.Tests
                 (hole) => {
                     if (hole.behaviour.name.Contains("right"))
                     {
-                        Assert.AreApproximatelyEqual(-1.2f, hole.position.x, "hole has right X pos");
-                        Assert.AreApproximatelyEqual(1.2f, hole.position.y, "hole has right Y pos");
-                        Assert.AreApproximatelyEqual(1.2f, hole.scale.x, "hole has right X sca");
-                        Assert.AreApproximatelyEqual(0.4f, hole.scale.y, "hole has right Y sca");
+                        Assert.AreApproximatelyEqual(-1.2f, hole.position.x, "hole has wrong X pos");
+                        Assert.AreApproximatelyEqual(1.2f, hole.position.y, "hole has wrong Y pos");
+                        Assert.AreApproximatelyEqual(1.2f, hole.scale.x, "hole has wrong X sca");
+                        Assert.AreApproximatelyEqual(0.4f, hole.scale.y, "hole has wrong Y sca");
                     }
                     if (hole.behaviour.name.Contains("left"))
                     {
-                        Assert.AreApproximatelyEqual(1.2f, hole.position.x, "hole has right X pos");
-                        Assert.AreApproximatelyEqual(1.2f, hole.position.y, "hole has right Y pos");
-                        Assert.AreApproximatelyEqual(1.2f, hole.scale.x, "hole has right X sca");
-                        Assert.AreApproximatelyEqual(0.4f, hole.scale.y, "hole has right Y sca");
+                        Assert.AreApproximatelyEqual(1.2f, hole.position.x, "hole has wrong X pos");
+                        Assert.AreApproximatelyEqual(1.2f, hole.position.y, "hole has wrong Y pos");
+                        Assert.AreApproximatelyEqual(1.2f, hole.scale.x, "hole has wrong X sca");
+                        Assert.AreApproximatelyEqual(0.4f, hole.scale.y, "hole has wrong Y sca");
                     }
                 });
             runCutOneHoletest(
@@ -178,17 +178,17 @@ namespace NodeLevelEditor.Tests
                 (hole) => {
                     if (hole.behaviour.name.Contains("right"))
                     {
-                        Assert.AreApproximatelyEqual(0.1f, hole.position.x, "hole has right X pos");
-                        Assert.AreApproximatelyEqual(-0.75f, hole.position.y, "hole has right Y pos");
-                        Assert.AreApproximatelyEqual(4f, hole.scale.x, "hole has right X sca");
-                        Assert.AreApproximatelyEqual(3.2f, hole.scale.y, "hole has right Y sca");
+                        Assert.AreApproximatelyEqual(0.1f, hole.position.x, "hole has wrong X pos");
+                        Assert.AreApproximatelyEqual(-0.75f, hole.position.y, "hole has wrong Y pos");
+                        Assert.AreApproximatelyEqual(4f, hole.scale.x, "hole has wrong X sca");
+                        Assert.AreApproximatelyEqual(3.2f, hole.scale.y, "hole has wrong Y sca");
                     }
                     if (hole.behaviour.name.Contains("left"))
                     {
-                        Assert.AreApproximatelyEqual(-0.1f, hole.position.x, "hole has right X pos");
-                        Assert.AreApproximatelyEqual(-0.75f, hole.position.y, "hole has right Y pos");
-                        Assert.AreApproximatelyEqual(4f, hole.scale.x, "hole has right X sca");
-                        Assert.AreApproximatelyEqual(3.2f, hole.scale.y, "hole has right Y sca");
+                        Assert.AreApproximatelyEqual(-0.1f, hole.position.x, "hole has wrong X pos");
+                        Assert.AreApproximatelyEqual(-0.75f, hole.position.y, "hole has wrong Y pos");
+                        Assert.AreApproximatelyEqual(4f, hole.scale.x, "hole has wrong X sca");
+                        Assert.AreApproximatelyEqual(3.2f, hole.scale.y, "hole has wrong Y sca");
                     }
                 });
         }
@@ -214,24 +214,24 @@ namespace NodeLevelEditor.Tests
 
                 if (hole.behaviour.name.Contains("right"))
                 {
-                    Assert.AreApproximatelyEqual(-1.75f, hole.position.x, "hole has right X pos");
-                    Assert.AreApproximatelyEqual(1.75f, hole.position.y, "hole has right Y pos");
-                    Assert.AreApproximatelyEqual(1.5f, hole.scale.x, "hole has right X sca");
-                    Assert.AreApproximatelyEqual(1.5f, hole.scale.y, "hole has right Y sca");
+                    Assert.AreApproximatelyEqual(-1.75f, hole.position.x, "hole has wrong X pos");
+                    Assert.AreApproximatelyEqual(1.75f, hole.position.y, "hole has wrong Y pos");
+                    Assert.AreApproximatelyEqual(1.5f, hole.scale.x, "hole has wrong X sca");
+                    Assert.AreApproximatelyEqual(1.5f, hole.scale.y, "hole has wrong Y sca");
                 }
                 if (hole.behaviour.name.Contains("front"))
                 {
-                    Assert.AreApproximatelyEqual(1.75f, hole.position.x, "hole has right X pos");
-                    Assert.AreApproximatelyEqual(1.75f, hole.position.y, "hole has right Y pos");
-                    Assert.AreApproximatelyEqual(1.5f, hole.scale.x, "hole has right X sca");
-                    Assert.AreApproximatelyEqual(1.5f, hole.scale.y, "hole has right Y sca");
+                    Assert.AreApproximatelyEqual(1.75f, hole.position.x, "hole has wrong X pos");
+                    Assert.AreApproximatelyEqual(1.75f, hole.position.y, "hole has wrong Y pos");
+                    Assert.AreApproximatelyEqual(1.5f, hole.scale.x, "hole has wrong X sca");
+                    Assert.AreApproximatelyEqual(1.5f, hole.scale.y, "hole has wrong Y sca");
                 }
                 if (hole.behaviour.name.Contains("top"))
                 {
-                    Assert.AreApproximatelyEqual(1.75f, hole.position.x, "hole has right X pos");
-                    Assert.AreApproximatelyEqual(-1.75f, hole.position.y, "hole has right Y pos");
-                    Assert.AreApproximatelyEqual(1.5f, hole.scale.x, "hole has right X sca");
-                    Assert.AreApproximatelyEqual(1.5f, hole.scale.y, "hole has right Y sca");
+                    Assert.AreApproximatelyEqual(1.75f, hole.position.x, "hole has wrong X pos");
+                    Assert.AreApproximatelyEqual(-1.75f, hole.position.y, "hole has wrong Y pos");
+                    Assert.AreApproximatelyEqual(1.5f, hole.scale.x, "hole has wrong X sca");
+                    Assert.AreApproximatelyEqual(1.5f, hole.scale.y, "hole has wrong Y sca");
                 }
             }
 
@@ -249,17 +249,17 @@ namespace NodeLevelEditor.Tests
                 (hole) => {
                     if (hole.behaviour.name.Contains("right"))
                     {
-                        Assert.AreApproximatelyEqual(-1.2f, hole.position.x, "hole has right X pos");
-                        Assert.AreApproximatelyEqual(1.2f, hole.position.y, "hole has right Y pos");
-                        Assert.AreApproximatelyEqual(2, hole.scale.x, "hole has right X sca");
-                        Assert.AreApproximatelyEqual(2, hole.scale.y, "hole has right Y sca");
+                        Assert.AreApproximatelyEqual(-1.2f, hole.position.x, "hole has wrong X pos");
+                        Assert.AreApproximatelyEqual(1.2f, hole.position.y, "hole has wrong Y pos");
+                        Assert.AreApproximatelyEqual(2, hole.scale.x, "hole has wrong X sca");
+                        Assert.AreApproximatelyEqual(2, hole.scale.y, "hole has wrong Y sca");
                     }
                     if (hole.behaviour.name.Contains("left"))
                     {
-                        Assert.AreApproximatelyEqual(1.2f, hole.position.x, "hole has right X pos");
-                        Assert.AreApproximatelyEqual(1.2f, hole.position.y, "hole has right Y pos");
-                        Assert.AreApproximatelyEqual(2, hole.scale.x, "hole has right X sca");
-                        Assert.AreApproximatelyEqual(2, hole.scale.y, "hole has right Y sca");
+                        Assert.AreApproximatelyEqual(1.2f, hole.position.x, "hole has wrong X pos");
+                        Assert.AreApproximatelyEqual(1.2f, hole.position.y, "hole has wrong Y pos");
+                        Assert.AreApproximatelyEqual(2, hole.scale.x, "hole has wrong X sca");
+                        Assert.AreApproximatelyEqual(2, hole.scale.y, "hole has wrong Y sca");
                     }
                 });
             this.nodesCreated.Clear();
@@ -269,17 +269,17 @@ namespace NodeLevelEditor.Tests
                 (hole) => {
                     if (hole.behaviour.name.Contains("right"))
                     {
-                        Assert.AreApproximatelyEqual(0.24f, hole.position.x, "hole has right X pos");
-                        Assert.AreApproximatelyEqual(-0.01f, hole.position.y, "hole has right Y pos");
-                        Assert.AreApproximatelyEqual(0.4f, hole.scale.x, "hole has right X sca");
-                        Assert.AreApproximatelyEqual(0.4f, hole.scale.y, "hole has right Y sca");
+                        Assert.AreApproximatelyEqual(0.24f, hole.position.x, "hole has wrong X pos");
+                        Assert.AreApproximatelyEqual(-0.01f, hole.position.y, "hole has wrong Y pos");
+                        Assert.AreApproximatelyEqual(0.4f, hole.scale.x, "hole has wrong X sca");
+                        Assert.AreApproximatelyEqual(0.4f, hole.scale.y, "hole has wrong Y sca");
                     }
                     if (hole.behaviour.name.Contains("left"))
                     {
-                        Assert.AreApproximatelyEqual(-0.24f, hole.position.x, "hole has right X pos");
-                        Assert.AreApproximatelyEqual(-0.01f, hole.position.y, "hole has right Y pos");
-                        Assert.AreApproximatelyEqual(0.4f, hole.scale.x, "hole has right X sca");
-                        Assert.AreApproximatelyEqual(0.4f, hole.scale.y, "hole has right Y sca");
+                        Assert.AreApproximatelyEqual(-0.24f, hole.position.x, "hole has wrong X pos");
+                        Assert.AreApproximatelyEqual(-0.01f, hole.position.y, "hole has wrong Y pos");
+                        Assert.AreApproximatelyEqual(0.4f, hole.scale.x, "hole has wrong X sca");
+                        Assert.AreApproximatelyEqual(0.4f, hole.scale.y, "hole has wrong Y sca");
                     }
                 });
             CleanUp();
@@ -317,45 +317,45 @@ namespace NodeLevelEditor.Tests
 
                 if (hole.behaviour.name.Contains("right"))
                 {
-                    Assert.AreApproximatelyEqual(-1.2f, hole.position.x, "hole has right X pos");
-                    Assert.AreApproximatelyEqual(0.8f, hole.position.y, "hole has right Y pos");
-                    Assert.AreApproximatelyEqual(2f, hole.scale.x, "hole has right X sca");
-                    Assert.AreApproximatelyEqual(2f, hole.scale.y, "hole has right Y sca");
+                    Assert.AreApproximatelyEqual(-1.2f, hole.position.x, "hole has wrong X pos");
+                    Assert.AreApproximatelyEqual(0.8f, hole.position.y, "hole has wrong Y pos");
+                    Assert.AreApproximatelyEqual(2f, hole.scale.x, "hole has wrong X sca");
+                    Assert.AreApproximatelyEqual(2f, hole.scale.y, "hole has wrong Y sca");
                 }
                 if (hole.behaviour.name.Contains("left"))
                 {
-                    Assert.AreApproximatelyEqual(1.2f, hole.position.x, "hole has right X pos");
-                    Assert.AreApproximatelyEqual(0.8f, hole.position.y, "hole has right Y pos");
-                    Assert.AreApproximatelyEqual(2f, hole.scale.x, "hole has right X sca");
-                    Assert.AreApproximatelyEqual(2f, hole.scale.y, "hole has right Y sca");
+                    Assert.AreApproximatelyEqual(1.2f, hole.position.x, "hole has wrong X pos");
+                    Assert.AreApproximatelyEqual(0.8f, hole.position.y, "hole has wrong Y pos");
+                    Assert.AreApproximatelyEqual(2f, hole.scale.x, "hole has wrong X sca");
+                    Assert.AreApproximatelyEqual(2f, hole.scale.y, "hole has wrong Y sca");
                 }
                 if (hole.behaviour.name.Contains("front"))
                 {
-                    Assert.AreApproximatelyEqual(0.8f, hole.position.x, "hole has right X pos");
-                    Assert.AreApproximatelyEqual(1.2f, hole.position.y, "hole has right Y pos");
-                    Assert.AreApproximatelyEqual(2f, hole.scale.x, "hole has right X sca");
-                    Assert.AreApproximatelyEqual(2f, hole.scale.y, "hole has right Y sca");
+                    Assert.AreApproximatelyEqual(0.8f, hole.position.x, "hole has wrong X pos");
+                    Assert.AreApproximatelyEqual(1.2f, hole.position.y, "hole has wrong Y pos");
+                    Assert.AreApproximatelyEqual(2f, hole.scale.x, "hole has wrong X sca");
+                    Assert.AreApproximatelyEqual(2f, hole.scale.y, "hole has wrong Y sca");
                 }
                 if (hole.behaviour.name.Contains("back"))
                 {
-                    Assert.AreApproximatelyEqual(-0.8f, hole.position.x, "hole has right X pos");
-                    Assert.AreApproximatelyEqual(1.2f, hole.position.y, "hole has right Y pos");
-                    Assert.AreApproximatelyEqual(2f, hole.scale.x, "hole has right X sca");
-                    Assert.AreApproximatelyEqual(2f, hole.scale.y, "hole has right Y sca");
+                    Assert.AreApproximatelyEqual(-0.8f, hole.position.x, "hole has wrong X pos");
+                    Assert.AreApproximatelyEqual(1.2f, hole.position.y, "hole has wrong Y pos");
+                    Assert.AreApproximatelyEqual(2f, hole.scale.x, "hole has wrong X sca");
+                    Assert.AreApproximatelyEqual(2f, hole.scale.y, "hole has wrong Y sca");
                 }
                 if (hole.behaviour.name.Contains("top"))
                 {
-                    Assert.AreApproximatelyEqual(0.8f, hole.position.x, "hole has right X pos");
-                    Assert.AreApproximatelyEqual(-1.2f, hole.position.y, "hole has right Y pos");
-                    Assert.AreApproximatelyEqual(2f, hole.scale.x, "hole has right X sca");
-                    Assert.AreApproximatelyEqual(2f, hole.scale.y, "hole has right Y sca");
+                    Assert.AreApproximatelyEqual(0.8f, hole.position.x, "hole has wrong X pos");
+                    Assert.AreApproximatelyEqual(-1.2f, hole.position.y, "hole has wrong Y pos");
+                    Assert.AreApproximatelyEqual(2f, hole.scale.x, "hole has wrong X sca");
+                    Assert.AreApproximatelyEqual(2f, hole.scale.y, "hole has wrong Y sca");
                 }
                 if (hole.behaviour.name.Contains("floor"))
                 {
-                    Assert.AreApproximatelyEqual(0.8f, hole.position.x, "hole has right X pos");
-                    Assert.AreApproximatelyEqual(1.2f, hole.position.y, "hole has right Y pos");
-                    Assert.AreApproximatelyEqual(2f, hole.scale.x, "hole has right X sca");
-                    Assert.AreApproximatelyEqual(2f, hole.scale.y, "hole has right Y sca");
+                    Assert.AreApproximatelyEqual(0.8f, hole.position.x, "hole has wrong X pos");
+                    Assert.AreApproximatelyEqual(1.2f, hole.position.y, "hole has wrong Y pos");
+                    Assert.AreApproximatelyEqual(2f, hole.scale.x, "hole has wrong X sca");
+                    Assert.AreApproximatelyEqual(2f, hole.scale.y, "hole has wrong Y sca");
                 }
             }
 
@@ -393,10 +393,10 @@ namespace NodeLevelEditor.Tests
             {
                 Assert.AreEqual(NodeType.HOLE, hole.nodeType);
 
-                Assert.AreApproximatelyEqual(0, hole.position.x, "hole has right X pos");
-                Assert.AreApproximatelyEqual(0, hole.position.y, "hole has right Y pos");
-                Assert.AreApproximatelyEqual(2, hole.scale.x, "hole has right X sca");
-                Assert.AreApproximatelyEqual(2, hole.scale.y, "hole has right Y sca");
+                Assert.AreApproximatelyEqual(0, hole.position.x, "hole has wrong X pos");
+                Assert.AreApproximatelyEqual(0, hole.position.y, "hole has wrong Y pos");
+                Assert.AreApproximatelyEqual(2, hole.scale.x, "hole has wrong X sca");
+                Assert.AreApproximatelyEqual(2, hole.scale.y, "hole has wrong Y sca");
             }
 
             NodeDataManager.onAddNode -= this.onAddNode;
