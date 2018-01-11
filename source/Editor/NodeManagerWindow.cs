@@ -114,8 +114,7 @@ namespace NodeLevelEditor
             {
                 var node = this.activeNodeBehavior();
                 NodeHelper.NormaliseScale(node);
-            }   
-            GUIHelper.HorizontalLine();
+            }
             if (GUILayout.Button("New Node"))
             {
                 NodeCreatorWindow.ShowWindow();
@@ -124,8 +123,12 @@ namespace NodeLevelEditor
             {
                 HoleCutterWindow.ShowWindow();
             }
+            GUIHelper.HorizontalLine();
+            if (GUILayout.Button("Close And Clean Scene"))
+            {
+                this.finishNodeEditing();
+            }
         }
-       
         private NodeBehaviour activeNodeBehavior()
         {
             var active = Selection.activeGameObject;
@@ -159,7 +162,6 @@ namespace NodeLevelEditor
 
             foreach (var node in NodeDataManager.NodeBehaviours)
             {
-                Debug.Log(node.name);
                 if (node.nodeType == NodeType.HOLE) { continue; /* dont save hole? */ }
 
                 node.UpdateJson(); // updates json
@@ -168,6 +170,48 @@ namespace NodeLevelEditor
             NodeDataManager.Save();
         }
 
+
+
+        private void finishNodeEditing()
+        {
+            NodeDataManager.Finish();
+
+            destroyAllBehaviours<NodeBehaviour>();
+            destroyAllGameObjects<HoleCutterBehaviour>();
+            destroyAllGameObjects<NodeBehaviour>();
+
+            closeAllOtherNodeWindows();
+            this.Close();
+        }
+        private void closeAllOtherNodeWindows()
+        {
+            closeOtherWindows(Resources.FindObjectsOfTypeAll<HoleCutterWindow>());
+            closeOtherWindows(Resources.FindObjectsOfTypeAll<NodeCreatorWindow>());
+            closeOtherWindows(Resources.FindObjectsOfTypeAll<CreateFromCubesWindow>());
+            closeOtherWindows(Resources.FindObjectsOfTypeAll<NodeManagerWindow>());
+        }
+        private void closeOtherWindows(EditorWindow[] windows)
+        {
+            foreach (var window in windows)
+            {
+                if (window == this) { continue; }
+                window.Close();
+            }
+        }
+        private void destroyAllBehaviours<T>() where T : MonoBehaviour
+        {
+            foreach (T b in FindObjectsOfType<T>())
+            {
+                DestroyImmediate(b);
+            }
+        }
+        private void destroyAllGameObjects<T>() where T : MonoBehaviour
+        {
+            foreach (T b in FindObjectsOfType<T>())
+            {
+                DestroyImmediate(b.gameObject);
+            }
+        }
 
         [MenuItem("Window/Node Level Editor/Node Manager")]
         public static void ShowWindow()

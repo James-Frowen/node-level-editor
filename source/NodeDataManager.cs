@@ -223,7 +223,13 @@ namespace NodeLevelEditor
         public static bool NeedSave { get { return Instance.needSave; } }
 
 
-
+        private static bool _finished = false;
+        public static bool Finished { get { return _finished; } }
+        public static void Finish()
+        {
+            _instance = null;
+            _finished = true;
+        }
 
         private NodeJsonHolder holder;
         private List<NodeBehaviour> nodes;

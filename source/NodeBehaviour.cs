@@ -212,6 +212,8 @@ namespace NodeLevelEditor
        
         public void OnDisable()
         {
+            if (NodeDataManager.Finished) { return; }
+
             if (NodeDataManager.IsLoaded)
             {
                 NodeDataManager.NodeDisabled(this);
@@ -228,6 +230,8 @@ namespace NodeLevelEditor
 
         public void OnDestroy()
         {
+            if (NodeDataManager.Finished) { return; }
+
             if (this.HasParent)
             {
                 this.RemoveParent();
