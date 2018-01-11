@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -102,8 +102,8 @@ namespace NodeLevelEditor
                 if (_instance == null)
                 {
                     // this may cause issues if loading data other than from ROOM_DATA_FILE
-                    Load(NodeDataName.DataFileName);
-                    // throw new Exception("NodeDataManager is not loaded, Call Load first");
+                    //Load(NodeDataName.DataFileName);
+                    throw new Exception("NodeDataManager is not loaded, Call Load first");
                 }
                 return _instance;
             }
