@@ -35,6 +35,13 @@ namespace NodeLevelEditor
                 NodeHelper.NormaliseScale(node);
             }
 
+            GUIHelper.HorizontalLine();
+
+
+            GUI.enabled = false;
+            EditorGUILayout.Vector3Field("Position", node.GetPosition());
+            EditorGUILayout.Vector3Field("Scale", node.GetScale());
+            GUI.enabled = true;
         }
 
         private void changeParentMenu(NodeBehaviour node)
