@@ -1,9 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
+
 namespace NodeLevelEditor
 {
     public class NodeFactory
     {
+        public static void CreateRootParent()
+        {
+            NodeBehaviour.RootParent = new NodeCreator.EmptyCreator(NodeBehaviour.DEFAULT_PARENT_NAME, Vector3.zero).Create();
+            NodeBehaviour.RootParent.noJson = true;
+        }
+
         public static NodeBehaviour CreateNode(NodeJson json)
         {
             json.ValidateNodeType();
@@ -15,6 +24,11 @@ namespace NodeLevelEditor
         }
         public static NodeBehaviour[] CreateNodes(NodeJson[] nodes)
         {
+            if (NodeBehaviour.RootParent == null)
+            {
+                CreateRootParent();
+            }
+
             foreach (var json in nodes)
             {
                 json.ValidateNodeType();
@@ -101,5 +115,7 @@ namespace NodeLevelEditor
                     throw new System.Exception("Node type not found: " + json.nodeType);
             }
         }
+
+        
     }
 }

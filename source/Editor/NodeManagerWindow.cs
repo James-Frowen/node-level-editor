@@ -143,13 +143,8 @@ namespace NodeLevelEditor
             NodeDataManager.Unload();
 
             NodeDataManager.Load(NodeDataName.DataFileName);
-            this.createRootParent();
+            NodeFactory.CreateRootParent();
             NodeFactory.CreateNodes(NodeDataManager.NodeJsons);
-        }
-        private void createRootParent()
-        {
-            NodeBehaviour.RootParent = new NodeCreator.EmptyCreator(NodeBehaviour.DEFAULT_PARENT_NAME, Vector3.zero).Create();
-            NodeBehaviour.RootParent.noJson = true;
         }
         public void UnLoad()
         {
