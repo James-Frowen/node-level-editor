@@ -91,15 +91,14 @@ namespace NodeLevelEditor
             GUI.enabled = true;
         }
 
-
-
-        public void OnEnable()
+        public void Update()
         {
             if (this.cutter == null)
             {
                 this.cutter = FindObjectOfType<HoleCutterBehaviour>();
             }
         }
+
         public void OnDestroy()
         {
             if (this.cutter != null)
