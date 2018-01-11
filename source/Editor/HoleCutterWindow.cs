@@ -7,6 +7,7 @@ namespace NodeLevelEditor
     public class HoleCutterWindow:EditorWindow
     {
         public HoleCutterBehaviour cutter;
+
         public bool HasCutter
         {
             get { return this.cutter != null; }
@@ -42,19 +43,12 @@ namespace NodeLevelEditor
 
         public void OnGUI()
         {
-            selectCutterGUI();
             newCutterGUI();
+            GUI.enabled = this.HasCutter;
+            selectCutterGUI();
             cutterSizeGUI();
             cutHoleGUI();
-        }
-
-        private void selectCutterGUI()
-        {
-            GUI.enabled = this.HasCutter;
-            if (GUILayout.Button("Select Cutter"))
-            {
-                Selection.activeGameObject = this.cutter.gameObject;
-            }
+            ignoreAxisGUI();
             GUI.enabled = true;
         }
 
@@ -71,24 +65,38 @@ namespace NodeLevelEditor
                 this.cutter = new GameObject("NLE_CUTTER").AddComponent<HoleCutterBehaviour>();
             }
         }
-      
+
+        private void selectCutterGUI()
+        {
+            if (GUILayout.Button("Select Cutter"))
+            {
+                Selection.activeGameObject = this.cutter.gameObject;
+            }
+        }
+
         private void cutterSizeGUI()
         {
-            GUI.enabled = this.HasCutter;
             this.CutterPos = EditorGUILayout.Vector3Field("Position", this.CutterPos);
             this.CutterSca = EditorGUILayout.Vector3Field("Scale", this.CutterSca);
-            GUI.enabled = true;
         }
 
 
         private void cutHoleGUI()
         {
-            GUI.enabled = this.HasCutter;
             if (GUILayout.Button("Cut Hole"))
             {
                 NodeHoleCutter.CutHoles(this.cutter);
             }
-            GUI.enabled = true;
+        }
+
+        private void ignoreAxisGUI()
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Ignore Axis");
+            NodeHoleCutter.IgnoreX = GUILayout.Toggle(NodeHoleCutter.IgnoreX, "X");
+            NodeHoleCutter.IgnoreY = GUILayout.Toggle(NodeHoleCutter.IgnoreY, "Y");
+            NodeHoleCutter.IgnoreZ = GUILayout.Toggle(NodeHoleCutter.IgnoreZ, "Z");
+            GUILayout.EndHorizontal();
         }
 
         public void Update()

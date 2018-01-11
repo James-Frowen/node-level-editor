@@ -60,6 +60,16 @@ namespace NodeLevelEditor
             }
         }
 
+        public static bool IgnoreX = false;
+        public static bool IgnoreY = false;
+        public static bool IgnoreZ = false;
+        public static void ResetIgnores()
+        {
+            IgnoreX = false;
+            IgnoreY = false;
+            IgnoreZ = false;
+        }
+
         private static Transform[] findIntersecting(Collider cutter)
         {
             var bounds = cutter.bounds;
@@ -72,7 +82,44 @@ namespace NodeLevelEditor
                 .Where(c => c != null)
                 .Where(c => bounds.Intersects(c.bounds))
                 .Select(c => c.transform)
+                .Where(checkIgnoreX)
+                .Where(checkIgnoreY)
+                .Where(checkIgnoreZ)
                 .ToArray();
+        }
+        private static bool checkIgnoreX(Transform t)
+        {
+            if (!IgnoreX) { return true; }
+
+            var normal = getNormal(t);
+
+            var isX = Mathf.Abs(Vector3.Dot(normal, Vector3.right)) > 0.5f;
+
+            return !isX; // isX return false
+        }
+        private static bool checkIgnoreY(Transform t)
+        {
+            if (!IgnoreY) { return true; }
+
+            var normal = getNormal(t);
+
+            var isY = Mathf.Abs(Vector3.Dot(normal, Vector3.up)) > 0.5f;
+
+            return !isY; // isY return false
+        }
+        private static bool checkIgnoreZ(Transform t)
+        {
+            if (!IgnoreZ) { return true; }
+
+            var normal = getNormal(t);
+
+            var isZ = Mathf.Abs(Vector3.Dot(normal, Vector3.forward)) > 0.5f;
+
+            return !isZ; // isZ return false
+        }
+        private static Vector3 getNormal(Transform t)
+        {
+            return t.rotation * Vector3.forward;
         }
 
         private static void cutHole(Transform cutter, Transform wall)
