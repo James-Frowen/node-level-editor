@@ -293,36 +293,48 @@ namespace NodeLevelEditor
 
             private void fixHoleOutSideOfQuad(NodeBehaviour top, NodeBehaviour bot, NodeBehaviour right, NodeBehaviour left)
             {
-                if (top.transform.localScale.y < 0)
+                if (top != null && top.transform.localScale.y < 0)
                 {
                     var extraScale = top.transform.localScale.y;
 
-                    right.transform.localPosition += Vector3.up * (extraScale / 2f);
-                    right.transform.localScale += Vector3.up * (extraScale);
-                    left.transform.localPosition += Vector3.up * (extraScale / 2f);
-                    left.transform.localScale += Vector3.up * (extraScale);
+                    if (right != null)
+                    {
+                        right.transform.localPosition += Vector3.up * (extraScale / 2f);
+                        right.transform.localScale += Vector3.up * (extraScale);
+                    }
+                    if (left != null)
+                    {
+                        left.transform.localPosition += Vector3.up * (extraScale / 2f);
+                        left.transform.localScale += Vector3.up * (extraScale);
+                    }
 
                     UnityEngine.Object.DestroyImmediate(top.gameObject);
 
                 }
-                if (bot.transform.localScale.y < 0)
+                if (bot != null && bot.transform.localScale.y < 0)
                 {
                     var extraScale = bot.transform.localScale.y;
 
-                    right.transform.localPosition -= Vector3.up * (extraScale / 2f);
-                    right.transform.localScale += Vector3.up * (extraScale);
-                    left.transform.localPosition -= Vector3.up * (extraScale / 2f);
-                    left.transform.localScale += Vector3.up * (extraScale);
+                    if (right != null)
+                    {
+                        right.transform.localPosition -= Vector3.up * (extraScale / 2f);
+                        right.transform.localScale += Vector3.up * (extraScale);
+                    }
+                    if (left != null)
+                    {
+                        left.transform.localPosition -= Vector3.up * (extraScale / 2f);
+                        left.transform.localScale += Vector3.up * (extraScale);
+                    }
 
                     UnityEngine.Object.DestroyImmediate(bot.gameObject);
                 }
 
 
-                if (left.transform.localScale.x < 0)
+                if (left != null && left.transform.localScale.x < 0)
                 {
                     UnityEngine.Object.DestroyImmediate(left.gameObject);
                 }
-                if (right.transform.localScale.x < 0)
+                if (right != null && right.transform.localScale.x < 0)
                 {
                     UnityEngine.Object.DestroyImmediate(right.gameObject);
                 }
