@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -29,7 +29,7 @@ namespace NodeLevelEditor
                 }
                 else
                 {
-                    Debug.Log(string.Format("file '{0}' does not exist, creating new instance", fileName));
+                    Debug.LogWarning(string.Format("Node data file '{0}' does not exist, creating empty instance instead of loading", fileName));
                     return new NodeJsonHolder();
                 }
             }
@@ -180,7 +180,7 @@ namespace NodeLevelEditor
             }
             else
             {
-                Debug.LogWarning("Can not remove node that is not in holder");
+                Debug.LogWarning(string.Format("Can not remove '{0}', it is not in holder", node.name));
             }
         }
         public static bool NodeJsonExist(NodeJson json)
