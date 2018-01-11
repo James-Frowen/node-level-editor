@@ -302,6 +302,43 @@ namespace NodeLevelEditor.Tests
             CleanUp();  
         }
 
+        [NUnit.Framework.Test]
+        public void CutHolesWhenCubeIsBiggerThanQuad()
+        {
+            Init();
+            createCube(0, 0, 0);
+            var cutterPos = new Vector3(3, 0, 0);
+            var cutterSca = new Vector3(6, 6, 6);
+            this.cutter.transform.position = cutterPos;
+            this.cutter.transform.localScale = cutterSca;
+            Debug.Log(string.Format("testing cutter with pos:{0} sca:{1}", cutterPos, cutterSca));
+
+            NodeDataManager.onAddNode += this.onAddNode;
+            NodeHoleCutter.CutHoles(this.cutter);
+
+            var expectedHoleCount = 5;
+            Assert.AreEqual(expectedHoleCount, this.nodesCreated.Count, string.Format("There are not {0} holes", expectedHoleCount));
+
+            foreach (var hole in this.nodesCreated)
+            {
+                Assert.AreEqual(NodeType.HOLE, hole.nodeType);
+                // json's hole centre will still be outside of quad, but when hole is created it is scaled to fit inside
+
+                if (hole.behaviour.name.Contains("right"))
+                {
+                    var expect = 0;
+                    Assert.AreEqual(expect, hole.behaviour.Children.Length, string.Format("There are not {0} children", expect));
+                }
+                else
+                {
+                    var expect = 1;
+                    Assert.AreEqual(expect, hole.behaviour.Children.Length, string.Format("There are not {0} children", expect));
+                }
+            }
+
+            NodeDataManager.onAddNode -= this.onAddNode;
+            CleanUp();
+        }
 
         [NUnit.Framework.Test]
         public void Cuts2HoleInUniform()
