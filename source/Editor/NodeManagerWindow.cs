@@ -144,7 +144,7 @@ namespace NodeLevelEditor
 
             NodeDataManager.Load(NodeDataName.DataFileName);
             this.createRootParent();
-            var nodes = NodeFactory.CreateNodes(NodeDataManager.NodeJsons);
+            NodeFactory.CreateNodes(NodeDataManager.NodeJsons);
         }
         private void createRootParent()
         {
