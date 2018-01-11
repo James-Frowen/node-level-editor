@@ -574,6 +574,7 @@ namespace NodeLevelEditor.Tests
             NodeDataManager.Load("");
             this.cutter = GameObject.CreatePrimitive(PrimitiveType.Cube);
             this.nodesCreated = new List<NodeJson>();
+            NodeHoleCutter.ResetIgnores();
         }
         public void CleanUp()
         {
