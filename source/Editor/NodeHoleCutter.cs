@@ -7,9 +7,36 @@ namespace NodeLevelEditor
 {
     public static class NodeHoleCutter
     {
+        public static void CutHoles(HoleCutterBehaviour cutter)
+        {
+            if (cutter == null)
+            {
+                Debug.LogError("cutter is null");
+                return;
+            }
+
+            var wallhit = findIntersecting(cutter.boxCollider);
+            foreach (var wall in wallhit)
+            {
+                cutHole(cutter.transform, wall);
+            }
+        }
+
         public static void CutHoles(GameObject cutter)
         {
-            var wallhit = findIntersecting(cutter);
+            if (cutter == null)
+            {
+                Debug.LogError("cutter is null");
+                return;
+            }
+
+            var collder = cutter.GetComponent<Collider>();
+            if (collder == null)
+            {
+                Debug.LogError("cutter needs a collder");
+                return;
+            }
+            var wallhit = findIntersecting(collder);
             foreach (var wall in wallhit)
             {
                 cutHole(cutter.transform, wall);
@@ -20,9 +47,9 @@ namespace NodeLevelEditor
             CutHoles(Selection.activeGameObject);
         }
        
-        private static Transform[] findIntersecting(GameObject cutter)
+        private static Transform[] findIntersecting(Collider cutter)
         {
-            var bounds = cutter.GetComponent<Collider>().bounds;
+            var bounds = cutter.bounds;
             return NodeDataManager.NodeBehaviours
                 .Select(n => n.GetComponent<Collider>())
                 .Where(c => c != null)
@@ -59,14 +86,12 @@ namespace NodeLevelEditor
         {
             var cSca = wall.rotation * cutter.localScale;
 
-            return new Vector2(Mathf.Abs(cSca.x), Mathf.Abs(cSca.y)); ;
+            return new Vector2(Mathf.Abs(cSca.x), Mathf.Abs(cSca.y));
         }
 
         private static Vector3 getParentScale(Transform wall)
         {
             return wall.parent.lossyScale;
         }
-
-
     }
 }

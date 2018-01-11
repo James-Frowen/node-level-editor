@@ -118,11 +118,11 @@ namespace NodeLevelEditor
             GUIHelper.HorizontalLine();
             if (GUILayout.Button("New Node"))
             {
-                NodeCreatorWindow.ShowWindow(this);
+                NodeCreatorWindow.ShowWindow();
             }
             if (GUILayout.Button("Cut Hole"))
             {
-                NodeHoleCutter.CutHolesWithSelected();
+                HoleCutterWindow.ShowWindow();
             }
         }
        

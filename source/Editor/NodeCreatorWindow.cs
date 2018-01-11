@@ -164,11 +164,10 @@ namespace NodeLevelEditor
             this.node = null;
         }
 
-        public static void ShowWindow(NodeManagerWindow parentWindow)
+        public static void ShowWindow()
         {
             var window = (NodeCreatorWindow)GetWindow(typeof(NodeCreatorWindow));
             window.minSize = new Vector2(50, 50);
-            window.parentWindow = parentWindow;
             window.Show();
         }
     }
