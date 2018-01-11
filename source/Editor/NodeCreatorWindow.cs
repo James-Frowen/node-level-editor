@@ -152,8 +152,7 @@ namespace NodeLevelEditor
         private void discardNode()
         {
             this.Close();
-
-        }
+        }   
 
         void OnDestroy()
         {

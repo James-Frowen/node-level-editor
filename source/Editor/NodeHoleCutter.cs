@@ -7,21 +7,10 @@ namespace NodeLevelEditor
 {
     public static class NodeHoleCutter
     {
-        public static void CutHoles(HoleCutterBehaviour cutter)
+        public static void CutHolesWithSelected()
         {
-            if (cutter == null)
-            {
-                Debug.LogError("cutter is null");
-                return;
-            }
-
-            var wallhit = findIntersecting(cutter.boxCollider);
-            foreach (var wall in wallhit)
-            {
-                cutHole(cutter.transform, wall);
-            }
+            CutHoles(Selection.activeGameObject);
         }
-
         public static void CutHoles(GameObject cutter)
         {
             if (cutter == null)
@@ -36,20 +25,48 @@ namespace NodeLevelEditor
                 Debug.LogError("cutter needs a collder");
                 return;
             }
-            var wallhit = findIntersecting(collder);
+            CutHoles(collder);
+        }
+        public static void CutHoles(Collider cutterCollder)
+        {
+            if (cutterCollder == null)
+            {
+                Debug.LogError("collider is null");
+                return;
+            }
+            var wallhit = findIntersecting(cutterCollder);
             foreach (var wall in wallhit)
             {
-                cutHole(cutter.transform, wall);
+                cutHole(cutterCollder.transform, wall);
             }
         }
-        public static void CutHolesWithSelected()
+        public static void CutHoles(HoleCutterBehaviour cutter)
         {
-            CutHoles(Selection.activeGameObject);
+            if (cutter == null)
+            {
+                Debug.LogError("cutter is null");
+                return;
+            }
+
+            CutHoles(cutter.transform.localPosition, cutter.transform.localScale);
         }
-       
+        public static void CutHoles(Vector3 pos, Vector3 sca)
+        {
+            var bounds = new Bounds(pos, sca);
+            var wallhit = findIntersecting(bounds);
+            foreach (var wall in wallhit)
+            {
+                cutHole(pos, sca, wall);
+            }
+        }
+
         private static Transform[] findIntersecting(Collider cutter)
         {
             var bounds = cutter.bounds;
+            return findIntersecting(bounds);
+        }
+        private static Transform[] findIntersecting(Bounds bounds)
+        {
             return NodeDataManager.NodeBehaviours
                 .Select(n => n.GetComponent<Collider>())
                 .Where(c => c != null)
@@ -57,10 +74,15 @@ namespace NodeLevelEditor
                 .Select(c => c.transform)
                 .ToArray();
         }
+
         private static void cutHole(Transform cutter, Transform wall)
         {
-            var position = calculateHolePosition(cutter, wall);
-            var scale = calculateHoleScale(cutter, wall);
+            cutHole(cutter.localPosition, cutter.localScale, wall);
+        }
+        private static void cutHole(Vector3 pos, Vector3 sca, Transform wall)
+        {
+            var position = calculateHolePosition(pos, wall);
+            var scale = calculateHoleScale(sca, wall);
 
             var parentScale = getParentScale(wall);
             var scaledPos = Helper.InverseScale(position, parentScale);
@@ -72,19 +94,19 @@ namespace NodeLevelEditor
             NodeFactory.CreateNode(hole);
         }
 
-        private static Vector3 calculateHolePosition(Transform cutter, Transform wall)
+        private static Vector3 calculateHolePosition(Vector3 cutterPosition, Transform wall)
         {
             var wPos = wall.position;
-            var cPos = cutter.position;
+            var cPos = cutterPosition;
 
             var pos = Quaternion.Inverse(wall.rotation) * (cPos - wPos);
             pos.z = 0;
             return pos;
         }
 
-        private static Vector3 calculateHoleScale(Transform cutter, Transform wall)
+        private static Vector3 calculateHoleScale(Vector3 cutterScale, Transform wall)
         {
-            var cSca = wall.rotation * cutter.localScale;
+            var cSca = wall.rotation * cutterScale;
 
             return new Vector2(Mathf.Abs(cSca.x), Mathf.Abs(cSca.y));
         }

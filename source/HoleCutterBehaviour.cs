@@ -16,8 +16,6 @@ namespace NodeLevelEditor
             }
         }
 
-        public BoxCollider boxCollider;
-
         private void OnEnable()
         {
             if (_instance == null)
@@ -27,19 +25,6 @@ namespace NodeLevelEditor
             else if (_instance != this)
             {
                 DestroyImmediate(this.gameObject);
-            }
-        }
-
-        public void Update()
-        {
-            if (this.boxCollider == null)
-            {
-                this.boxCollider = this.GetComponent<BoxCollider>();
-
-                if (this.boxCollider == null)
-                {
-                    this.boxCollider = this.gameObject.AddComponent<BoxCollider>();
-                }
             }
         }
 
