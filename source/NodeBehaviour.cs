@@ -207,15 +207,32 @@ namespace NodeLevelEditor
         }
         public void OnEnable()
         {
-            NodeDataManager.NodeEnabled(this);
+            StartCoroutine("nodeEnabledCoroutine");
         }
+       
         public void OnDisable()
         {
-            NodeDataManager.NodeDisabled(this);
+            if (NodeDataManager.IsLoaded)
+            {
+                NodeDataManager.NodeDisabled(this);
+            }
         }
+        private IEnumerator nodeEnabledCoroutine()
+        {
+            while (!NodeDataManager.IsLoaded)
+            {
+                yield return null;
+            }
+            NodeDataManager.NodeEnabled(this);
+        }
+
         public void OnDestroy()
         {
-            if (!this.noJson && this.json != null)
+            if (this.HasParent)
+            {
+                this.RemoveParent();
+            }
+            if (!this.noJson && this.json != null && NodeDataManager.IsLoaded)
             {
                 NodeDataManager.RemoveNode(this.json);
             }
