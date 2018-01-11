@@ -190,7 +190,9 @@ namespace NodeLevelEditor
                 updateBot(bottom);
                 updateRight(right);
                 updateLeft(left);
-                
+
+                this.fixHoleOutSideOfQuad(top, bottom, right, left);
+
                 this.deleteNode(oldWall);
 
                 return newWall;
@@ -207,6 +209,7 @@ namespace NodeLevelEditor
                 var node = new QuadCreator(oldWall.ToJson()).Create();
                 node.SetParent(parent);
                 node.name = this.name + nodeName;
+                node.noJson = true;
 
                 return node;       
             }
@@ -288,6 +291,43 @@ namespace NodeLevelEditor
                 if (Mathf.Abs(s2) < SMALLEST_WALL) { this.deleteNode(node); }
             }
 
+            private void fixHoleOutSideOfQuad(NodeBehaviour top, NodeBehaviour bot, NodeBehaviour right, NodeBehaviour left)
+            {
+                if (top.transform.localScale.y < 0)
+                {
+                    var extraScale = top.transform.localScale.y;
+
+                    right.transform.localPosition += Vector3.up * (extraScale / 2f);
+                    right.transform.localScale += Vector3.up * (extraScale);
+                    left.transform.localPosition += Vector3.up * (extraScale / 2f);
+                    left.transform.localScale += Vector3.up * (extraScale);
+
+                    UnityEngine.Object.DestroyImmediate(top.gameObject);
+
+                }
+                if (bot.transform.localScale.y < 0)
+                {
+                    var extraScale = bot.transform.localScale.y;
+
+                    right.transform.localPosition -= Vector3.up * (extraScale / 2f);
+                    right.transform.localScale += Vector3.up * (extraScale);
+                    left.transform.localPosition -= Vector3.up * (extraScale / 2f);
+                    left.transform.localScale += Vector3.up * (extraScale);
+
+                    UnityEngine.Object.DestroyImmediate(bot.gameObject);
+                }
+
+
+                if (left.transform.localScale.x < 0)
+                {
+                    UnityEngine.Object.DestroyImmediate(left.gameObject);
+                }
+                if (right.transform.localScale.x < 0)
+                {
+                    UnityEngine.Object.DestroyImmediate(right.gameObject);
+                }
+
+            }
 
             private NodeBehaviour getOldWall()
             {
