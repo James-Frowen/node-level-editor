@@ -32,7 +32,7 @@ There are a few tests that can be run by unity to make sure some parts of this p
 
 This tool was created to help the creating of room based scene in unity. Boxes made of 6 quad facing inwards, and the ability to cut holes in these quads will allow you to prototype levels quickly. 
 
-An Example can be seen [here](https://pbs.twimg.com/media/DTZ3_ZjXkAAwMoZ.jpg).
+![example of level created](https://pbs.twimg.com/media/DTZ3_ZjXkAAwMoZ.jpg)
 
 The scripts save the data about the current nodes in a json file. When you open a scene you can select when where data will be loaded from and saved to. You can also open the data file and edit it manually, details [here](#json_data). The scripts will create a `ROOT` node that will be the default parent of any other node. 
 
