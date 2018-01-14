@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using UnityEditor;
 using UnityEngine;
 
@@ -6,7 +6,6 @@ namespace NodeLevelEditor
 {
     public class NodeCreatorWindow : EditorWindow
     {
-        public NodeManagerWindow parentWindow;
         public bool showNodeInScene;
         public NodeJson node;
         public NodeBehaviour parent;
@@ -145,7 +144,6 @@ namespace NodeLevelEditor
             {
                 this.createNodeBehaviour();
             }
-            this.parentWindow.sceneChanged = true;
             this.accepted = true;
             this.Close();
         }
