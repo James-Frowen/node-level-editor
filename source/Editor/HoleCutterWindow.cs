@@ -118,7 +118,8 @@ namespace NodeLevelEditor
         public static void ShowWindow()
         {
             var window = (HoleCutterWindow)GetWindow(typeof(HoleCutterWindow));
-            window.minSize = new Vector2(50, 50);
+            window.minSize = new Vector2(200, 270);
+            window.titleContent = new GUIContent("Cut holes");
             window.Show();
         }
     }

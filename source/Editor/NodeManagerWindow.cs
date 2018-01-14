@@ -26,7 +26,6 @@ namespace NodeLevelEditor
             {
                 this.selectPrimativeParent();
             }
-
         }
         private void selectPrimativeParent()
         {
@@ -217,8 +216,8 @@ namespace NodeLevelEditor
         public static void ShowWindow()
         {
             var window = (NodeManagerWindow)GetWindow(typeof(NodeManagerWindow));
-            window.minSize = new Vector2(50, 50);
-            window.name = "Node manager";
+            window.minSize = new Vector2(200,270);
+            window.titleContent = new GUIContent("Node manager");
             window.Show();
         }
     }

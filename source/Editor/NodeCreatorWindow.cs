@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEditor;
 using UnityEngine;
 
@@ -166,7 +166,8 @@ namespace NodeLevelEditor
         public static void ShowWindow()
         {
             var window = (NodeCreatorWindow)GetWindow(typeof(NodeCreatorWindow));
-            window.minSize = new Vector2(50, 50);
+            window.titleContent = new GUIContent("Create node");
+            window.minSize = new Vector2(200, 270);
             window.Show();
         }
     }
