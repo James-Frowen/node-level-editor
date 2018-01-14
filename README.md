@@ -68,6 +68,8 @@ Accepting the node will close the window and add the node to the scene. **The da
 
 ## Cut Holes <a name="holes"></a>
 
+![cutting holes with cube](./docs/cutting-holes.gif)
+
 ## JSON data <a name="json_data"></a>
 
 
