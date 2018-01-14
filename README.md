@@ -1,6 +1,8 @@
 # node-level-editor
 
-Unity3d Editor tools to create rooms quickly.
+Unity3d Editor tools to create rooms quickly. 
+
+These tools are in the beta stage of development, while they should be safe to use in existing scenes it is advised to use them in an new scene to start with.
 
 ## Features
 
