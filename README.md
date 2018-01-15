@@ -83,7 +83,7 @@ Set the container to be the parent of the cubes you have create.
 
 When you press create all current nodes in the selected data file are delete and replace when the new nodes.
 
-![create from cube window](create-from-cube-window.jpg)
+![create from cube window](./docs/create-from-cube-window.jpg)
 
 
 ## Cut Holes <a name="holes"></a>
