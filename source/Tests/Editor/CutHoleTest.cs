@@ -571,7 +571,7 @@ namespace NodeLevelEditor.Tests
 
         public void Init()
         {
-            NodeDataManager.Load("");
+            NodeDataManager.Load("", new NodeJsonHolder());
             this.cutter = GameObject.CreatePrimitive(PrimitiveType.Cube);
             this.nodesCreated = new List<NodeJson>();
             NodeHoleCutter.ResetIgnores();

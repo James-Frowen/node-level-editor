@@ -19,7 +19,8 @@ namespace NodeLevelEditor
             if (GUILayout.Button("Create"))
             {
                 Debug.Log("Creating new room layout from cubes, old data will be deleted");
-                NodeDataManager.Load(NodeDataName.DataFileName); 
+                var data = NodeDataLoader.LoadAll(NodeDataName.DataFileName);
+                NodeDataManager.Load(NodeDataName.DataFileName, data); 
                 NodeDataManager.DeleteAll();
 
                 var cubes = this.container.GetComponentsInChildren<Transform>();
@@ -53,7 +54,7 @@ namespace NodeLevelEditor
             GUI.enabled = this.hasCreated;
             if (GUILayout.Button("Save"))
             {
-                NodeDataManager.Save();
+                NodeDataLoader.SaveAll(NodeDataManager.SaveFilePath(), NodeDataManager.SaveDataHolder());
             }
             GUI.enabled = true;
         }

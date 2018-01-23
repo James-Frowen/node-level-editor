@@ -144,7 +144,8 @@ namespace NodeLevelEditor
 
             NodeDataManager.Unload();
 
-            NodeDataManager.Load(NodeDataName.DataFileName);
+            var data = NodeDataLoader.LoadAll(NodeDataName.DataFileName);
+            NodeDataManager.Load(NodeDataName.DataFileName, data);
             NodeFactory.CreateRootParent();
             NodeFactory.CreateNodes(NodeDataManager.NodeJsons);
         }
@@ -166,7 +167,7 @@ namespace NodeLevelEditor
                 node.UpdateJson(); // updates json
                 node.NodeState.UpdateState();
             }
-            NodeDataManager.Save();
+            NodeDataLoader.SaveAll(NodeDataManager.SaveFilePath(), NodeDataManager.SaveDataHolder());
         }
 
 

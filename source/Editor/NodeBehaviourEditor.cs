@@ -23,7 +23,7 @@ namespace NodeLevelEditor
             {
                 var json = node.ToJson();//need to add as well??
                 NodeDataManager.AddNode(json);
-                NodeDataManager.Save();
+                NodeDataLoader.SaveAll(NodeDataManager.SaveFilePath(), NodeDataManager.SaveDataHolder());
                 node.NodeState.UpdateState();
             }
             GUI.enabled = true;
