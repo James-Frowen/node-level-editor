@@ -43,7 +43,7 @@ namespace NodeLevelEditor
             }
         }
 
-        private void OnEnable()
+        public void OnEnable()
         {
             if (_instance == null)
             {

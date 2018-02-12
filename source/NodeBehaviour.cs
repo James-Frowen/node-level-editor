@@ -50,7 +50,7 @@ namespace NodeLevelEditor
             this.transform.localPosition = updatedJson.position;
             if (this.GetScale() != updatedJson.scale)
             {
-                var newScale = Helper.InverseScale(updatedJson.scale, this.GetScale());
+                var newScale = NodeHelper.InverseScale(updatedJson.scale, this.GetScale());
                 this.transform.localScale = newScale;
                 NodeHelper.NormaliseScale(this);
             }
@@ -127,7 +127,7 @@ namespace NodeLevelEditor
             Debug.Assert(child.parent == null, "child already has a parent");
             this.children.Add(child);
             child.parent = this;
-            Helper.SetParentKeepLocals(child.transform, child.parent.transform);
+            NodeHelper.SetParentKeepLocals(child.transform, child.parent.transform);
         }
         public void SetParent(NodeBehaviour parent)
         {
@@ -140,7 +140,7 @@ namespace NodeLevelEditor
             Debug.Assert(child.parent == this, "childs parent is not this");
             this.children.Remove(child);
             child.parent = null;
-            Helper.SetParentKeepLocals(child.transform, null);
+            NodeHelper.SetParentKeepLocals(child.transform, null);
         }
         public void RemoveParent()
         {

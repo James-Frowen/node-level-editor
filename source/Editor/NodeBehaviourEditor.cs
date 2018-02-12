@@ -5,7 +5,7 @@ using UnityEngine;
 namespace NodeLevelEditor
 {
     [CustomEditor(typeof(NodeBehaviour))]
-    public class NodeBehaviourEditor : UnityEditor.Editor
+    public class NodeBehaviourEditor : Editor
     {
         private bool showChangeParent = false;
         private NodeBehaviour newParent;

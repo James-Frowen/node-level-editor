@@ -132,8 +132,8 @@ namespace NodeLevelEditor
             var scale = calculateHoleScale(sca, wall);
 
             var parentScale = getParentScale(wall);
-            var scaledPos = Helper.InverseScale(position, parentScale);
-            var scaledSca = Helper.InverseScale(scale, parentScale);
+            var scaledPos = NodeHelper.InverseScale(position, parentScale);
+            var scaledSca = NodeHelper.InverseScale(scale, parentScale);
 
             var hole = new NodeJson(wall.name, scaledPos, scaledSca, "", NodeType.HOLE);
 

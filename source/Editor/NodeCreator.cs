@@ -132,7 +132,7 @@ namespace NodeLevelEditor
             }
             private NodeBehaviour createQuad(string nameDirection, Vector3 pos, Vector3 sca, Quaternion rot, NodeBehaviour parent)
             {
-                var creator = new QuadCreator(string.Format("{0} {1}", this.name, nameDirection), Helper.Scale(pos, this.scale / 2), sca)
+                var creator = new QuadCreator(string.Format("{0} {1}", this.name, nameDirection), NodeHelper.Scale(pos, this.scale / 2), sca)
                 {
                     rotation = rot
                 };
@@ -228,8 +228,8 @@ namespace NodeLevelEditor
                 w.localPosition = new Vector3(0, p2, 0);
                 w.localScale += new Vector3(0, s2 - hs * 2, 0);
 
-                w.localPosition = Helper.InverseScale(w.localPosition, startScale);
-                w.localScale = Helper.InverseScale(w.localScale, startScale);
+                w.localPosition = NodeHelper.InverseScale(w.localPosition, startScale);
+                w.localScale = NodeHelper.InverseScale(w.localScale, startScale);
 
                 if (Mathf.Abs(s2) < SMALLEST_WALL) {this.deleteNode(node); }
             }
@@ -247,8 +247,8 @@ namespace NodeLevelEditor
                 w.localPosition = new Vector3(0, p2, 0);
                 w.localScale += new Vector3(0, s2 - hs * 2, 0);
 
-                w.localPosition = Helper.InverseScale(w.localPosition, startScale);
-                w.localScale = Helper.InverseScale(w.localScale, startScale);
+                w.localPosition = NodeHelper.InverseScale(w.localPosition, startScale);
+                w.localScale = NodeHelper.InverseScale(w.localScale, startScale);
 
                 if (Mathf.Abs(s2) < SMALLEST_WALL) { this.deleteNode(node); }
             }
@@ -266,8 +266,8 @@ namespace NodeLevelEditor
                 w.localPosition = new Vector3(p2, this.position.y, 0);
                 w.localScale += new Vector3(s2 - hs * 2, this.scale.y - w.localScale.y, 0);
 
-                w.localPosition = Helper.InverseScale(w.localPosition, startScale);
-                w.localScale = Helper.InverseScale(w.localScale, startScale);
+                w.localPosition = NodeHelper.InverseScale(w.localPosition, startScale);
+                w.localScale = NodeHelper.InverseScale(w.localScale, startScale);
 
                 if (Mathf.Abs(s2) < SMALLEST_WALL) { this.deleteNode(node); }
             }
@@ -285,8 +285,8 @@ namespace NodeLevelEditor
                 w.localPosition = new Vector3(p2, this.position.y, 0);
                 w.localScale += new Vector3(s2 - hs * 2, this.scale.y - w.localScale.y, 0);
 
-                w.localPosition = Helper.InverseScale(w.localPosition, startScale);
-                w.localScale = Helper.InverseScale(w.localScale, startScale);
+                w.localPosition = NodeHelper.InverseScale(w.localPosition, startScale);
+                w.localScale = NodeHelper.InverseScale(w.localScale, startScale);
 
                 if (Mathf.Abs(s2) < SMALLEST_WALL) { this.deleteNode(node); }
             }
